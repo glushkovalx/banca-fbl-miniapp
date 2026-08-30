@@ -16,12 +16,15 @@
     --paper:#FFFFFF;
     --danger:#C43D2E;
 
-    --bg: var(--tg-theme-bg-color, var(--lime));
-    --text: var(--tg-theme-text-color, var(--ink));
-    --hint: var(--tg-theme-hint-color, var(--ink-soft));
-    --button: var(--tg-theme-button-color, var(--ink));
-    --button-text: var(--tg-theme-button-text-color, var(--lime));
-    --section-bg: var(--tg-theme-secondary-bg-color, var(--paper));
+    /* Фирменные цвета — всегда лайм/ink, не подстраиваются под тему
+       Telegram (иначе в реальном Mini App бренд перебивается на
+       белый/чёрный из настроек мессенджера пользователя) */
+    --bg: var(--lime);
+    --text: var(--ink);
+    --hint: var(--ink-soft);
+    --button: var(--ink);
+    --button-text: var(--lime);
+    --section-bg: var(--paper);
   }
 
   *{box-sizing:border-box;}
@@ -634,7 +637,7 @@
   // MOCK_MODE = true — тестируем UI без реального backend.
   // Переключить на false и указать API_BASE_URL, когда backend задеплоен.
   const MOCK_MODE = false;
-  const API_BASE_URL = "https://banca-fbl-backend.onrender.com";
+  const API_BASE_URL = "http://127.0.0.1:8000";
 
   // Если страница открыта по ссылке из QR (?order=BFBL-XXXXXX) —
   // показываем детали заказа вместо формы оценки
