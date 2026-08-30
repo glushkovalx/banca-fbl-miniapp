@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Оценка джерси</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --lime:#D9F42B;
+    --lime-deep:#A8C400;
+    --ink:#101014;
+    --ink-soft:#5C5C63;
+    --paper:#FFFFFF;
+    --danger:#C43D2E;
+
+    --bg: var(--tg-theme-bg-color, var(--lime));
+    --text: var(--tg-theme-text-color, var(--ink));
+    --hint: var(--tg-theme-hint-color, var(--ink-soft));
+    --button: var(--tg-theme-button-color, var(--ink));
+    --button-text: var(--tg-theme-button-text-color, var(--lime));
+    --section-bg: var(--tg-theme-secondary-bg-color, var(--paper));
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    padding:20px 16px 40px;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .brand-mark{
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    background:var(--ink);
+    color:var(--lime);
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;
+    font-size:19px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:14px;
+  }
+
+  .club-crest-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:4px 2px 2px;
+  }
+  .club-crest{
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    background:var(--ink);
+    color:var(--lime);
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;
+    font-size:15px;
+    letter-spacing:.01em;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+  }
+  .club-crest-name{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:600;
+    font-size:15px;
+    color:var(--text);
+  }
+
+  .section-header{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin:6px 0 -2px;
+  }
+  .section-header .num{
+    width:20px;
+    height:20px;
+    border-radius:50%;
+    border:1.5px solid var(--ink);
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;
+    font-size:11px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+  }
+  .section-header .label{
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+
+  .eyebrow{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:600;
+    font-size:12px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin:0 0 4px;
+  }
+  h1{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;
+    font-size:30px;
+    letter-spacing:-.01em;
+    margin:0 0 20px;
+    line-height:1.1;
+  }
+
+  form{
+    background:var(--section-bg);
+    border-radius:16px;
+    padding:18px 16px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    box-shadow:0 1px 0 rgba(0,0,0,.04);
+  }
+
+
+  .field{display:flex; flex-direction:column; gap:6px;}
+  .field label{
+    font-size:12px;
+    font-weight:600;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    color:var(--hint);
+  }
+  .field-hint{
+    margin:2px 0 0;
+    font-size:12.5px;
+    line-height:1.4;
+    color:var(--hint);
+  }
+  .team-type-toggle{
+    display:flex;
+    gap:8px;
+  }
+  .toggle-option{
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    padding:10px;
+    border:1.5px solid #E3E3DC;
+    border-radius:9px;
+    font-size:14px;
+    cursor:pointer;
+  }
+  .toggle-option input{ margin:0; }
+  .toggle-option:has(input:checked){
+    border-color:var(--ink);
+    background:rgba(16,16,20,.06);
+    font-weight:600;
+  }
+  .row-2{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+
+  input, select{
+    font-family:'Inter',sans-serif;
+    font-size:16px;
+    padding:11px 12px;
+    border-radius:9px;
+    border:1.5px solid #E3E3DC;
+    background:#FAFAF7;
+    color:var(--text);
+    appearance:none;
+  }
+  input:focus, select:focus{
+    outline:none;
+    border-color:var(--ink);
+  }
+  select optgroup{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;
+    font-style:normal;
+    color:var(--ink);
+  }
+  select optgroup option{
+    font-family:'Inter',sans-serif;
+    font-weight:400;
+    color:var(--text);
+  }
+
+  .divider{
+    height:1px;
+    background:repeating-linear-gradient(90deg, #E3E3DC 0 6px, transparent 6px 12px);
+    margin:2px 0;
+  }
+
+  button[type=submit]{
+    margin-top:4px;
+    background:var(--button);
+    color:var(--button-text);
+    border:none;
+    border-radius:10px;
+    padding:14px;
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:600;
+    font-size:15px;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    cursor:pointer;
+  }
+  button[type=submit]:active{opacity:.85;}
+  button[type=submit]:disabled{opacity:.5;}
+
+  /* --- Результат: карточка-квитанция, билет-стаб с перфорацией --- */
+  #result{ margin-top:22px; display:none; }
+
+  .care-tag{
+    position:relative;
+    background:var(--ink);
+    color:var(--lime);
+    border-radius:14px;
+    padding:22px 18px 18px;
+    overflow:hidden;
+  }
+  .care-tag::before, .care-tag::after{
+    content:"";
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width:22px;
+    height:22px;
+    border-radius:50%;
+    background:var(--bg);
+  }
+  .care-tag::before{left:-11px;}
+  .care-tag::after{right:-11px;}
+
+  .care-tag .tag-title{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:rgba(217,244,43,.65);
+    margin-bottom:10px;
+  }
+  .care-tag .price{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:56px;
+    font-weight:700;
+    line-height:1;
+    margin-bottom:4px;
+    color:var(--lime);
+    letter-spacing:-.02em;
+  }
+  .care-tag .price .cur{font-size:26px; vertical-align:top; margin-right:2px;}
+  .care-tag .range{
+    font-size:13px;
+    color:rgba(217,244,43,.6);
+    margin-bottom:16px;
+  }
+
+  .condition-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:6px 12px;
+    border-radius:20px;
+    border:1.5px solid rgba(217,244,43,.4);
+    font-size:13px;
+    font-weight:600;
+    margin-bottom:14px;
+  }
+  .condition-badge .score{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;
+  }
+
+  .note{
+    margin-top:12px;
+    font-size:13px;
+    color:#FF8A73;
+  }
+
+  #checkout-btn{
+    width:100%;
+    margin-top:14px;
+    background:var(--ink);
+    color:var(--lime);
+    border:none;
+    border-radius:10px;
+    padding:14px;
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:600;
+    font-size:15px;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    cursor:pointer;
+  }
+  #checkout-btn:active{opacity:.85;}
+
+  #order-form{
+    margin-top:14px;
+    background:var(--section-bg);
+    border-radius:16px;
+    padding:18px 16px;
+    display:none;
+    flex-direction:column;
+    gap:14px;
+  }
+
+  #order-success{ margin-top:14px; }
+  .order-success-card{
+    text-align:center;
+  }
+  .order-qr-img{
+    width:180px;
+    height:180px;
+    display:block;
+    margin:8px auto 14px;
+    border-radius:10px;
+    background:#fff;
+    padding:8px;
+  }
+  .order-id{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;
+    font-size:22px;
+    color:var(--lime);
+    letter-spacing:.02em;
+    margin-bottom:6px;
+  }
+
+  .tag-grid-view{
+    text-align:left;
+    border-top:1.5px dashed rgba(217,244,43,.3);
+    padding-top:14px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    font-size:13px;
+  }
+  .tag-grid-view > div{ display:flex; justify-content:space-between; gap:12px; }
+  .tag-grid-view .k{ color:rgba(217,244,43,.6); flex-shrink:0; }
+  .tag-grid-view .v{ font-weight:600; color:var(--lime); text-align:right; }
+
+  .spinner{
+    display:none;
+    text-align:center;
+    padding:16px 0;
+    font-size:13px;
+    color:var(--hint);
+    font-family:'Space Grotesk',sans-serif;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+</style>
+</head>
+<body>
+
+  <div id="order-view" style="display:none;">
+    <div class="brand-mark">b.</div>
+    <p class="eyebrow">Заказ</p>
+    <div class="care-tag" id="order-view-card">
+      <div class="tag-title">Загрузка...</div>
+    </div>
+  </div>
+
+  <div id="main-app">
+  <div class="brand-mark">b.</div>
+  <p class="eyebrow">Классические джерси · оценка стоимости</p>
+  <h1>Оцени свою футболку</h1>
+
+  <form id="estimate-form">
+    <div class="section-header">
+      <span class="num">1</span>
+      <span class="label">Команда и сезон</span>
+    </div>
+
+    <div class="field">
+      <label>Сборная или клуб?</label>
+      <div class="team-type-toggle">
+        <label class="toggle-option">
+          <input type="radio" name="team_type" value="club" checked>
+          <span>Клуб</span>
+        </label>
+        <label class="toggle-option">
+          <input type="radio" name="team_type" value="national">
+          <span>Сборная</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="field" id="club-field-clubs">
+      <label for="club-clubs">Клуб</label>
+      <select id="club-clubs" name="club">
+        <option value="" disabled selected>Выбери клуб</option>
+        <option value="Barcelona">Barcelona</option>
+        <option value="Real Madrid">Real Madrid</option>
+        <option value="Manchester United">Manchester United</option>
+        <option value="Liverpool">Liverpool</option>
+        <option value="Arsenal">Arsenal</option>
+        <option value="Chelsea">Chelsea</option>
+        <option value="Juventus">Juventus</option>
+        <option value="AC Milan">AC Milan</option>
+        <option value="Bayern Munich">Bayern Munich</option>
+        <option value="Paris Saint-Germain">PSG</option>
+        <option value="Manchester City">Manchester City</option>
+        <option value="Tottenham">Tottenham</option>
+        <option value="Newcastle">Newcastle</option>
+        <option value="Roma">AS Roma</option>
+        <option value="Inter Milan">Inter Milan</option>
+        <option value="Borussia Dortmund">Borussia Dortmund</option>
+        <option value="Napoli">Napoli</option>
+        <option value="Atletico Madrid">Atlético Madrid</option>
+        <option value="Ajax">Ajax</option>
+        <option value="PSV">PSV</option>
+        <option value="Feyenoord">Feyenoord</option>
+        <option value="Benfica">Benfica</option>
+        <option value="Porto">Porto</option>
+        <option value="Zenit">Зенит</option>
+        <option value="CSKA Moscow">ЦСКА</option>
+        <option value="Lokomotiv Moscow">Локомотив</option>
+        <option value="Spartak Moscow">Спартак</option>
+      </select>
+    </div>
+
+    <div class="field" id="club-field-national" style="display:none;">
+      <label for="club-national">Сборная</label>
+      <select id="club-national" name="club" disabled>
+        <option value="" disabled selected>Выбери сборную</option>
+        <option value="Brazil">Бразилия</option>
+        <option value="Germany">Германия</option>
+        <option value="Argentina">Аргентина</option>
+        <option value="France">Франция</option>
+        <option value="Netherlands">Нидерланды</option>
+        <option value="England">Англия</option>
+        <option value="Italy">Италия</option>
+        <option value="Spain">Испания</option>
+        <option value="Russia">Россия</option>
+      </select>
+    </div>
+
+    <div class="club-crest-row" id="club-crest-row" style="display:none;">
+      <div class="club-crest" id="club-crest-badge"></div>
+      <span class="club-crest-name" id="club-crest-name"></span>
+    </div>
+
+    <div class="row-2">
+      <div class="field" id="season-field-club">
+        <label for="season-club">Сезон</label>
+        <input id="season-club" type="text" placeholder="2009/10">
+      </div>
+      <div class="field" id="season-field-national" style="display:none;">
+        <label for="season-national">Турнир</label>
+        <select id="season-national">
+          <option value="2026" data-tournament="World Cup">ЧМ 2026</option>
+          <option value="2022" data-tournament="World Cup">ЧМ 2022</option>
+          <option value="2018" data-tournament="World Cup">ЧМ 2018</option>
+          <option value="2014" data-tournament="World Cup">ЧМ 2014</option>
+          <option value="2010" data-tournament="World Cup">ЧМ 2010</option>
+          <option value="2024" data-tournament="Euro">Евро 2024</option>
+          <option value="2020" data-tournament="Euro">Евро 2020</option>
+          <option value="2016" data-tournament="Euro">Евро 2016</option>
+          <option value="2012" data-tournament="Euro">Евро 2012</option>
+          <option value="2024" data-tournament="Copa America">Копа Америка 2024</option>
+          <option value="2021" data-tournament="Copa America">Копа Америка 2021</option>
+          <option value="other" data-tournament="">Другой год (не турнир)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="jersey_type">Тип</label>
+        <select id="jersey_type" name="jersey_type" required>
+          <option value="home">Домашняя</option>
+          <option value="away">Гостевая</option>
+          <option value="third">Третья</option>
+          <option value="goalkeeper">Вратарская</option>
+          <option value="training">Тренировочная</option>
+          <option value="pre_match">Предматчевая</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field" id="season-other-national" style="display:none;">
+      <label for="season-national-other">Год</label>
+      <input id="season-national-other" type="text" placeholder="2017">
+    </div>
+
+    <div class="section-header">
+      <span class="num">2</span>
+      <span class="label">Детали товара</span>
+    </div>
+
+    <div class="row-2">
+      <div class="field">
+        <label for="player_name">Игрок (если есть)</label>
+        <input id="player_name" name="player_name" type="text" placeholder="Messi">
+      </div>
+      <div class="field">
+        <label for="player_number">Номер</label>
+        <input id="player_number" name="player_number" type="number" min="0" max="99" placeholder="10">
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="authenticity">Тип пошива</label>
+      <select id="authenticity" name="authenticity" required>
+        <option value="replica">Обычная (магазинная реплика)</option>
+        <option value="authentic">Профессиональный крой (как у игроков)</option>
+        <option value="player_issue">Именная, под конкретного футболиста</option>
+        <option value="match_worn">Реально надевалась игроком в матче</option>
+      </select>
+      <p class="field-hint" id="authenticity-hint"></p>
+    </div>
+
+    <div class="row-2">
+      <div class="field">
+        <label for="size">Размер</label>
+        <input id="size" name="size" type="text" placeholder="L">
+      </div>
+      <div class="field"></div>
+    </div>
+
+    <div class="section-header">
+      <span class="num">3</span>
+      <span class="label">Состояние</span>
+    </div>
+
+    <div class="field">
+      <label for="defects">Дефекты ткани</label>
+      <select id="defects" name="defects">
+        <option value="none">Нет</option>
+        <option value="pilling">Катышки</option>
+        <option value="stains">Пятна</option>
+        <option value="holes">Дыры</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="print_condition">Состояние принта</label>
+      <select id="print_condition" name="print_condition">
+        <option value="perfect">Идеальный</option>
+        <option value="faded">Выцветший</option>
+        <option value="cracked">Потрескавшийся</option>
+        <option value="flaking">Осыпается</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="tag_condition">Бирка</label>
+      <select id="tag_condition" name="tag_condition">
+        <option value="original">Оригинальная</option>
+        <option value="reprinted">Перепечатанная</option>
+        <option value="missing">Отсутствует</option>
+      </select>
+    </div>
+
+    <button type="submit" id="submit-btn">Оценить</button>
+  </form>
+
+  <div class="spinner" id="spinner">Анализируем рынок…</div>
+
+  <div id="result">
+    <div class="care-tag">
+      <div class="tag-title">Оценка стоимости</div>
+      <div class="price"><span class="cur" id="res-currency">$</span><span id="res-price">—</span></div>
+      <div class="range" id="res-range"></div>
+      <div class="condition-badge" id="res-condition" style="display:none;">
+        <span class="score" id="res-condition-score"></span>
+        <span id="res-condition-label"></span>
+      </div>
+      <div class="note" id="res-note" style="display:none;"></div>
+    </div>
+
+    <button type="button" id="checkout-btn" style="display:none;">Оформить</button>
+
+    <form id="order-form" style="display:none;">
+      <div class="field">
+        <label for="contact_name">Имя</label>
+        <input id="contact_name" type="text" placeholder="Как к тебе обращаться" required>
+      </div>
+      <div class="field">
+        <label for="contact_phone">Телефон</label>
+        <input id="contact_phone" type="tel" placeholder="+7 900 000-00-00" required>
+      </div>
+
+      <div class="field">
+        <label>Способ получения</label>
+        <div class="team-type-toggle">
+          <label class="toggle-option">
+            <input type="radio" name="delivery_method" value="pickup" checked>
+            <span>Самовывоз</span>
+          </label>
+          <label class="toggle-option">
+            <input type="radio" name="delivery_method" value="courier">
+            <span>Курьер</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="field" id="address-field" style="display:none;">
+        <label for="address">Адрес доставки</label>
+        <input id="address" type="text" placeholder="Город, улица, дом, квартира">
+      </div>
+
+      <button type="submit" id="order-submit-btn">Подтвердить заказ</button>
+    </form>
+
+    <div id="order-success" style="display:none;">
+      <div class="care-tag order-success-card">
+        <div class="tag-title">Заказ оформлен</div>
+        <img id="order-qr" class="order-qr-img" alt="QR-код заказа">
+        <div class="order-id" id="order-id-text"></div>
+        <div class="range" id="order-delivery-text"></div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+<script>
+  const tg = window.Telegram?.WebApp;
+  if (tg) { tg.ready(); tg.expand(); }
+
+  // === Конфигурация ===
+  // MOCK_MODE = true — тестируем UI без реального backend.
+  // Переключить на false и указать API_BASE_URL, когда backend задеплоен.
+  const MOCK_MODE = false;
+  const API_BASE_URL = "https://banca-fbl-backend.onrender.com";
+
+  // Если страница открыта по ссылке из QR (?order=BFBL-XXXXXX) —
+  // показываем детали заказа вместо формы оценки
+  const urlParams = new URLSearchParams(window.location.search);
+  const orderIdFromUrl = urlParams.get('order');
+  if (orderIdFromUrl) {
+    document.getElementById('main-app').style.display = 'none';
+    document.getElementById('order-view').style.display = 'block';
+    loadOrderView(orderIdFromUrl);
+  }
+
+  async function loadOrderView(orderId) {
+    const card = document.getElementById('order-view-card');
+    try {
+      const resp = await fetch(`${API_BASE_URL}/api/order/${orderId}`);
+      if (!resp.ok) throw new Error(resp.status === 404 ? 'Заказ не найден' : `Ошибка сервера: ${resp.status}`);
+      const order = await resp.json();
+
+      const currencySymbols = { USD: '$', RUB: '₽', GBP: '£', EUR: '€' };
+      const curLabel = currencySymbols[order.currency] || order.currency;
+      const deliveryLabels = { pickup: 'Самовывоз', courier: 'Доставка курьером' };
+      const createdDate = new Date(order.created_at).toLocaleString('ru-RU');
+
+      card.innerHTML = `
+        <div class="tag-title">Заказ ${order.order_id}</div>
+        <div class="price">${curLabel}${Math.round(order.final_price)}</div>
+        <div class="range" style="margin-bottom:14px;">${order.club} · ${order.season} · ${order.jersey_type}</div>
+        <div class="tag-grid-view">
+          <div><span class="k">Получение</span><span class="v">${deliveryLabels[order.delivery_method] || order.delivery_method}</span></div>
+          <div><span class="k">Контакт</span><span class="v">${order.contact_name}, ${order.contact_phone}</span></div>
+          ${order.address ? `<div><span class="k">Адрес</span><span class="v">${order.address}</span></div>` : ''}
+          <div><span class="k">Создан</span><span class="v">${createdDate}</span></div>
+        </div>
+      `;
+    } catch (err) {
+      card.innerHTML = `<div class="tag-title">Ошибка</div><div class="note" style="display:block;">${err.message}</div>`;
+    }
+  }
+
+  const authenticityHints = {
+    replica: "Такую продают в фан-магазинах и на маркетплейсах — самый распространённый и доступный вариант.",
+    authentic: "Пошита из той же ткани и по тому же крою, что и версия для игроков, но без привязки к конкретному футболисту. Дороже обычной реплики.",
+    player_issue: "Изготовлена под определённого игрока (посадка, вентиляция), но не обязательно та самая, что была на нём во время матча. Стоит заметно дороже.",
+    match_worn: "Подтверждённо была надета игроком в конкретном матче. Самый редкий и дорогой вариант.",
+  };
+
+  function updateAuthenticityHint() {
+    const select = document.getElementById('authenticity');
+    document.getElementById('authenticity-hint').textContent =
+      authenticityHints[select.value] || '';
+  }
+  document.getElementById('authenticity').addEventListener('change', updateAuthenticityHint);
+  updateAuthenticityHint();
+
+  // Те же коэффициенты, что в backend/app/services/pricing.py —
+  // держать в синхроне при изменении значений там.
+  const DEFECT_MULTIPLIERS = { none: 1.0, pilling: 0.93, stains: 0.85, holes: 0.70 };
+  const PRINT_MULTIPLIERS = { perfect: 1.0, faded: 0.90, cracked: 0.85, flaking: 0.75 };
+  const TAG_MULTIPLIERS = { original: 1.0, reprinted: 0.95, missing: 0.90 };
+  const WORST_MULTIPLIER = DEFECT_MULTIPLIERS.holes * PRINT_MULTIPLIERS.flaking * TAG_MULTIPLIERS.missing;
+
+  const CONDITION_LABELS = [
+    [9, "Отличное"],
+    [7, "Хорошее"],
+    [5, "Среднее"],
+    [3, "Ниже среднего"],
+    [0, "Плохое"],
+  ];
+
+  function conditionLabelFor(score) {
+    for (const [min, label] of CONDITION_LABELS) {
+      if (score >= min) return label;
+    }
+    return CONDITION_LABELS[CONDITION_LABELS.length - 1][1];
+  }
+
+  function conditionBadgeColor(score) {
+    // Только оттенки лайма — яркость падает вместе с оценкой состояния,
+    // без радуги (в стиле дисциплинированной чёрно-лаймовой палитры)
+    if (score >= 9) return "#D9F42B";  // 100% — отличное
+    if (score >= 7) return "#D9F42B99"; // ~60% — хорошее
+    if (score >= 5) return "#D9F42B66"; // ~40% — среднее
+    if (score >= 3) return "#D9F42B40"; // ~25% — ниже среднего
+    return "#D9F42B26";                 // ~15% — плохое
+  }
+
+  let lastConditionScore = 10;
+  let lastConditionLabel = "Отличное";
+
+  function updateConditionScore() {
+    const defects = document.getElementById('defects').value;
+    const print = document.getElementById('print_condition').value;
+    const tag = document.getElementById('tag_condition').value;
+
+    const multiplier = DEFECT_MULTIPLIERS[defects] * PRINT_MULTIPLIERS[print] * TAG_MULTIPLIERS[tag];
+    const score = Math.round(((multiplier - WORST_MULTIPLIER) / (1 - WORST_MULTIPLIER)) * 10);
+
+    lastConditionScore = score;
+    lastConditionLabel = conditionLabelFor(score);
+  }
+
+  const teamTypeRadios = document.querySelectorAll('input[name="team_type"]');
+  const clubField = document.getElementById('club-field-clubs');
+  const nationalField = document.getElementById('club-field-national');
+  const clubSelect = document.getElementById('club-clubs');
+  const nationalSelect = document.getElementById('club-national');
+  const seasonClubField = document.getElementById('season-field-club');
+  const seasonNationalField = document.getElementById('season-field-national');
+  const seasonNationalSelect = document.getElementById('season-national');
+  const seasonOtherField = document.getElementById('season-other-national');
+
+  function updateTeamType() {
+    const isNational = document.querySelector('input[name="team_type"]:checked').value === 'national';
+    clubField.style.display = isNational ? 'none' : '';
+    nationalField.style.display = isNational ? '' : 'none';
+    clubSelect.disabled = isNational;
+    nationalSelect.disabled = !isNational;
+
+    seasonClubField.style.display = isNational ? 'none' : '';
+    seasonNationalField.style.display = isNational ? '' : 'none';
+    updateSeasonOtherVisibility();
+  }
+  teamTypeRadios.forEach(r => r.addEventListener('change', updateTeamType));
+
+  function updateSeasonOtherVisibility() {
+    const isNational = document.querySelector('input[name="team_type"]:checked').value === 'national';
+    const isOther = isNational && seasonNationalSelect.value === 'other';
+    seasonOtherField.style.display = isOther ? '' : 'none';
+  }
+  seasonNationalSelect.addEventListener('change', updateSeasonOtherVisibility);
+
+  // Короткие инициалы для значка клуба/сборной (не логотипы — см.
+  // обсуждение с пользователем про товарные знаки)
+  const CLUB_INITIALS = {
+    "Barcelona": "BAR", "Real Madrid": "RMA", "Manchester United": "MUN",
+    "Liverpool": "LIV", "Arsenal": "ARS", "Chelsea": "CHE", "Juventus": "JUV",
+    "AC Milan": "MIL", "Bayern Munich": "BAY", "Paris Saint-Germain": "PSG",
+    "Manchester City": "MCI", "Tottenham": "TOT", "Newcastle": "NEW",
+    "Roma": "ROM", "Inter Milan": "INT", "Borussia Dortmund": "BVB",
+    "Napoli": "NAP", "Atletico Madrid": "ATM", "Ajax": "AJX", "PSV": "PSV",
+    "Feyenoord": "FEY", "Benfica": "BEN", "Porto": "POR", "Zenit": "ZEN",
+    "CSKA Moscow": "CSKA", "Lokomotiv Moscow": "LOK", "Spartak Moscow": "SPA",
+    "Brazil": "BRA", "Germany": "GER", "Argentina": "ARG", "France": "FRA",
+    "Netherlands": "NED", "England": "ENG", "Italy": "ITA", "Spain": "ESP",
+    "Russia": "RUS",
+  };
+
+  const crestRow = document.getElementById('club-crest-row');
+  const crestBadge = document.getElementById('club-crest-badge');
+  const crestName = document.getElementById('club-crest-name');
+
+  function updateClubCrest() {
+    const isNational = document.querySelector('input[name="team_type"]:checked').value === 'national';
+    const activeSelect = isNational ? nationalSelect : clubSelect;
+    const value = activeSelect.value;
+
+    if (!value) {
+      crestRow.style.display = 'none';
+      return;
+    }
+    const selectedOption = activeSelect.selectedOptions[0];
+    crestBadge.textContent = CLUB_INITIALS[value] || value.slice(0, 3).toUpperCase();
+    crestName.textContent = selectedOption.textContent;
+    crestRow.style.display = 'flex';
+  }
+  clubSelect.addEventListener('change', updateClubCrest);
+  nationalSelect.addEventListener('change', updateClubCrest);
+  teamTypeRadios.forEach(r => r.addEventListener('change', updateClubCrest));
+  updateTeamType();
+
+  // Поднимаем реально самые популярные (по факту запросов оценки)
+  // клубы/сборные в начало списка — топ-5 честно считается backend'ом,
+  // не угадан заранее. Если данных ещё нет — список остаётся как есть.
+  function reorderSelectByPopularity(selectEl, topValues) {
+    if (!topValues || !topValues.length) return;
+    const placeholder = selectEl.querySelector('option[value=""]');
+    const options = Array.from(selectEl.querySelectorAll('option[value]:not([value=""])'));
+    const optionByValue = Object.fromEntries(options.map(o => [o.value, o]));
+
+    const topOptions = [];
+    topValues.forEach(v => { if (optionByValue[v]) topOptions.push(optionByValue[v]); });
+    const restOptions = options.filter(o => !topValues.includes(o.value));
+
+    if (!topOptions.length) return;
+
+    // Лёгкий лаймовый фон на сами топ-5 пункты — сработает не везде
+    // (Safari/iOS игнорирует background-color у <option>), но не
+    // навредит там, где не сработает. Заголовок группы (optgroup)
+    // поддерживается везде и не зависит от этого.
+    topOptions.forEach(o => { o.style.backgroundColor = '#D9F42B33'; });
+
+    const topGroup = document.createElement('optgroup');
+    topGroup.label = '⭐ Самые популярные';
+    topOptions.forEach(o => topGroup.appendChild(o));
+
+    const restGroup = document.createElement('optgroup');
+    restGroup.label = 'Все варианты';
+    restOptions.forEach(o => restGroup.appendChild(o));
+
+    if (placeholder) selectEl.appendChild(placeholder);
+    selectEl.appendChild(topGroup);
+    selectEl.appendChild(restGroup);
+    if (placeholder) selectEl.insertBefore(placeholder, selectEl.firstChild);
+  }
+
+  (async function loadPopularClubs() {
+    if (MOCK_MODE) return;
+    try {
+      const resp = await fetch(`${API_BASE_URL}/api/popular-clubs`);
+      if (!resp.ok) return;
+      const data = await resp.json();
+      reorderSelectByPopularity(clubSelect, data.clubs);
+      reorderSelectByPopularity(nationalSelect, data.national);
+    } catch (err) {
+      // тихо игнорируем — список просто останется в исходном порядке
+    }
+  })();
+
+  const form = document.getElementById('estimate-form');
+  const submitBtn = document.getElementById('submit-btn');
+  const spinner = document.getElementById('spinner');
+  const resultEl = document.getElementById('result');
+  let lastPayload = null;
+
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    updateConditionScore();
+
+    const fd = new FormData(form);
+    const isNational = document.querySelector('input[name="team_type"]:checked').value === 'national';
+
+    let season, tournament = null;
+    if (isNational) {
+      if (seasonNationalSelect.value === 'other') {
+        season = document.getElementById('season-national-other').value;
+      } else {
+        const selectedOption = seasonNationalSelect.selectedOptions[0];
+        season = selectedOption.value;
+        tournament = selectedOption.dataset.tournament || null;
+      }
+    } else {
+      season = document.getElementById('season-club').value;
+    }
+
+    const payload = {
+      club: fd.get('club'),
+      season: season,
+      tournament: tournament,
+      jersey_type: fd.get('jersey_type'),
+      player_name: fd.get('player_name') || null,
+      player_number: fd.get('player_number') ? Number(fd.get('player_number')) : null,
+      authenticity: fd.get('authenticity'),
+      size: fd.get('size') || null,
+      defects: fd.get('defects'),
+      print_condition: fd.get('print_condition'),
+      tag_condition: fd.get('tag_condition'),
+    };
+
+    submitBtn.disabled = true;
+    resultEl.style.display = 'none';
+    spinner.style.display = 'block';
+    lastPayload = payload;
+
+    try {
+      const data = MOCK_MODE ? await mockEstimate(payload) : await fetchEstimate(payload);
+      renderResult(data);
+    } catch (err) {
+      renderError(err);
+    } finally {
+      submitBtn.disabled = false;
+      spinner.style.display = 'none';
+    }
+  });
+
+  async function fetchEstimate(payload) {
+    const resp = await fetch(`${API_BASE_URL}/api/estimate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!resp.ok) throw new Error(`Ошибка сервера: ${resp.status}`);
+    return resp.json();
+  }
+
+  // Мок повторяет форму реального EstimateResponse из backend/app/models/schemas.py
+  async function mockEstimate(payload) {
+    await new Promise(r => setTimeout(r, 700));
+    return {
+      final_price: 8027,
+      price_range_min: 5890,
+      price_range_max: 10450,
+      currency: "RUB",
+      condition_multiplier: 0.9,
+      sources: [
+        { source: "ebay", matched_listings_count: 14, median_price: 92, weight_used: 0.65 },
+        { source: "cfs", matched_listings_count: 6, median_price: 78, weight_used: 0.35 },
+      ],
+      note: null,
+    };
+  }
+
+  function renderResult(data) {
+    // Новая оценка — сбрасываем предыдущее состояние заказа, если было
+    document.getElementById('order-form').style.display = 'none';
+    document.getElementById('order-success').style.display = 'none';
+
+    const currencySymbols = { USD: '$', RUB: '₽', GBP: '£', EUR: '€' };
+    document.getElementById('res-currency').textContent =
+      currencySymbols[data.currency] || data.currency;
+    document.getElementById('res-price').textContent =
+      data.final_price != null ? data.final_price.toFixed(0) : '—';
+    const curLabel = currencySymbols[data.currency] || data.currency;
+    document.getElementById('res-range').textContent =
+      data.price_range_min != null
+        ? `Диапазон: ${data.price_range_min}–${data.price_range_max} ${curLabel}`
+        : '';
+
+    const conditionEl = document.getElementById('res-condition');
+    if (data.final_price != null) {
+      document.getElementById('res-condition-score').textContent = `${lastConditionScore}/10`;
+      document.getElementById('res-condition-label').textContent = lastConditionLabel;
+      conditionEl.style.background = conditionBadgeColor(lastConditionScore);
+      // При низкой оценке фон почти прозрачный (сливается с тёмной
+      // карточкой) — тёмный текст там нечитаем, переключаем на лаймовый
+      conditionEl.style.color = lastConditionScore >= 7 ? '#101014' : '#D9F42B';
+      conditionEl.style.display = 'inline-flex';
+    } else {
+      conditionEl.style.display = 'none';
+    }
+
+    const noteEl = document.getElementById('res-note');
+    if (data.note) {
+      noteEl.textContent = data.note;
+      noteEl.style.display = 'block';
+    } else {
+      noteEl.style.display = 'none';
+    }
+
+    const checkoutBtn = document.getElementById('checkout-btn');
+    if (data.final_price != null) {
+      lastEstimate = {
+        club: lastPayload.club,
+        season: lastPayload.season,
+        jersey_type: lastPayload.jersey_type,
+        final_price: data.final_price,
+        currency: data.currency,
+        tournament: lastPayload.tournament || null,
+        player_name: lastPayload.player_name || null,
+        player_number: lastPayload.player_number || null,
+        authenticity: lastPayload.authenticity || null,
+        size: lastPayload.size || null,
+        defects: lastPayload.defects || null,
+        print_condition: lastPayload.print_condition || null,
+        tag_condition: lastPayload.tag_condition || null,
+        condition_score: lastConditionScore,
+        condition_label: lastConditionLabel,
+        price_range_min: data.price_range_min || null,
+        price_range_max: data.price_range_max || null,
+      };
+      checkoutBtn.style.display = 'block';
+    } else {
+      checkoutBtn.style.display = 'none';
+    }
+
+    resultEl.style.display = 'block';
+    resultEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function renderError(err) {
+    resultEl.style.display = 'block';
+    document.getElementById('res-price').textContent = '—';
+    document.getElementById('res-range').textContent = '';
+    document.getElementById('checkout-btn').style.display = 'none';
+    const noteEl = document.getElementById('res-note');
+    noteEl.textContent = 'Не удалось получить оценку: ' + err.message;
+    noteEl.style.display = 'block';
+  }
+
+  // === Оформление заказа ===
+  let lastEstimate = null;
+
+  const checkoutBtn = document.getElementById('checkout-btn');
+  const orderForm = document.getElementById('order-form');
+  const orderSuccessEl = document.getElementById('order-success');
+  const addressField = document.getElementById('address-field');
+  const orderSubmitBtn = document.getElementById('order-submit-btn');
+
+  checkoutBtn.addEventListener('click', () => {
+    checkoutBtn.style.display = 'none';
+    orderForm.style.display = 'flex';
+    orderForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  document.querySelectorAll('input[name="delivery_method"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      const isCourier = document.querySelector('input[name="delivery_method"]:checked').value === 'courier';
+      addressField.style.display = isCourier ? '' : 'none';
+    });
+  });
+
+  orderForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!lastEstimate) return;
+
+    const deliveryMethod = document.querySelector('input[name="delivery_method"]:checked').value;
+    const orderPayload = {
+      ...lastEstimate,
+      delivery_method: deliveryMethod,
+      contact_name: document.getElementById('contact_name').value,
+      contact_phone: document.getElementById('contact_phone').value,
+      address: deliveryMethod === 'courier' ? document.getElementById('address').value : null,
+      telegram_username: tg?.initDataUnsafe?.user?.username || null,
+    };
+
+    orderSubmitBtn.disabled = true;
+    try {
+      const resp = await fetch(`${API_BASE_URL}/api/order`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderPayload),
+      });
+      if (!resp.ok) throw new Error(`Ошибка сервера: ${resp.status}`);
+      const orderData = await resp.json();
+      renderOrderSuccess(orderData, deliveryMethod);
+    } catch (err) {
+      alert('Не удалось оформить заказ: ' + err.message);
+    } finally {
+      orderSubmitBtn.disabled = false;
+    }
+  });
+
+  function renderOrderSuccess(orderData, deliveryMethod) {
+    orderForm.style.display = 'none';
+
+    // QR ведёт на страницу просмотра заказа (?order=ID), а не просто
+    // текстовый код — при сканировании сразу открываются детали
+    const orderUrl = `${window.location.origin}${window.location.pathname}?order=${orderData.order_id}`;
+    const qrData = encodeURIComponent(orderUrl);
+    document.getElementById('order-qr').src =
+      `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${qrData}`;
+    document.getElementById('order-id-text').textContent = orderData.order_id;
+
+    const deliveryLabels = { pickup: 'Самовывоз', courier: 'Доставка курьером' };
+    document.getElementById('order-delivery-text').textContent =
+      deliveryLabels[deliveryMethod] || deliveryMethod;
+
+    orderSuccessEl.style.display = 'block';
+    orderSuccessEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+</script>
+</body>
+</html>
