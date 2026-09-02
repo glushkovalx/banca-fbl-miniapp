@@ -609,21 +609,26 @@
       </div>
 
       <div class="field">
-        <label>Способ получения</label>
+        <label>Как передать джерси?</label>
         <div class="team-type-toggle">
           <label class="toggle-option">
             <input type="radio" name="delivery_method" value="pickup" checked>
-            <span>Самовывоз</span>
+            <span>Принесу сам</span>
           </label>
           <label class="toggle-option">
             <input type="radio" name="delivery_method" value="courier">
-            <span>Курьер</span>
+            <span>Приедет курьер</span>
           </label>
         </div>
       </div>
 
+      <div class="field" id="store-address-field">
+        <label>Наш адрес</label>
+        <p class="field-hint" id="store-address-text">Загрузка адреса...</p>
+      </div>
+
       <div class="field" id="address-field" style="display:none;">
-        <label for="address">Адрес доставки</label>
+        <label for="address">Адрес, откуда забрать</label>
         <input id="address" type="text" placeholder="Город, улица, дом, квартира">
       </div>
 
@@ -670,7 +675,7 @@
 
       const currencySymbols = { USD: '$', RUB: '₽', GBP: '£', EUR: '€' };
       const curLabel = currencySymbols[order.currency] || order.currency;
-      const deliveryLabels = { pickup: 'Самовывоз', courier: 'Доставка курьером' };
+      const deliveryLabels = { pickup: 'Принесу сам', courier: 'Приедет курьер' };
       const createdDate = new Date(order.created_at).toLocaleString('ru-RU');
 
       card.innerHTML = `
@@ -1036,18 +1041,35 @@
   const orderForm = document.getElementById('order-form');
   const orderSuccessEl = document.getElementById('order-success');
   const addressField = document.getElementById('address-field');
+  const storeAddressField = document.getElementById('store-address-field');
   const orderSubmitBtn = document.getElementById('order-submit-btn');
 
   checkoutBtn.addEventListener('click', () => {
     checkoutBtn.style.display = 'none';
     orderForm.style.display = 'flex';
     orderForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    loadStoreAddress();
   });
+
+  let storeAddressLoaded = false;
+  async function loadStoreAddress() {
+    if (storeAddressLoaded || MOCK_MODE) return;
+    try {
+      const resp = await fetch(`${API_BASE_URL}/api/store-info`);
+      if (!resp.ok) return;
+      const data = await resp.json();
+      document.getElementById('store-address-text').textContent = data.address || 'Адрес уточнит менеджер';
+      storeAddressLoaded = true;
+    } catch (err) {
+      document.getElementById('store-address-text').textContent = 'Адрес уточнит менеджер';
+    }
+  }
 
   document.querySelectorAll('input[name="delivery_method"]').forEach(radio => {
     radio.addEventListener('change', () => {
       const isCourier = document.querySelector('input[name="delivery_method"]:checked').value === 'courier';
       addressField.style.display = isCourier ? '' : 'none';
+      storeAddressField.style.display = isCourier ? 'none' : '';
     });
   });
 
@@ -1093,7 +1115,7 @@
       `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${qrData}`;
     document.getElementById('order-id-text').textContent = orderData.order_id;
 
-    const deliveryLabels = { pickup: 'Самовывоз', courier: 'Доставка курьером' };
+    const deliveryLabels = { pickup: 'Принесу сам', courier: 'Приедет курьер' };
     document.getElementById('order-delivery-text').textContent =
       deliveryLabels[deliveryMethod] || deliveryMethod;
 
