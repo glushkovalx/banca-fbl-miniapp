@@ -179,7 +179,7 @@
     background:rgba(16,16,20,.06);
     font-weight:600;
   }
-  .row-2{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  .row-2{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:10px;}
 
   input, select{
     font-family:'Inter',sans-serif;
@@ -190,6 +190,11 @@
     background:#FAFAF7;
     color:var(--text);
     appearance:none;
+    min-width:0;
+    width:100%;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
   }
   input:focus, select:focus{
     outline:none;
