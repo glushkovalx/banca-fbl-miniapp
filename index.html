@@ -478,18 +478,18 @@
       <div class="field" id="season-field-national" style="display:none;">
         <label for="season-national">Турнир</label>
         <select id="season-national">
-          <option value="2026" data-tournament="World Cup">ЧМ 2026</option>
-          <option value="2022" data-tournament="World Cup">ЧМ 2022</option>
-          <option value="2018" data-tournament="World Cup">ЧМ 2018</option>
-          <option value="2014" data-tournament="World Cup">ЧМ 2014</option>
-          <option value="2010" data-tournament="World Cup">ЧМ 2010</option>
-          <option value="2024" data-tournament="Euro">Евро 2024</option>
-          <option value="2020" data-tournament="Euro">Евро 2020</option>
-          <option value="2016" data-tournament="Euro">Евро 2016</option>
-          <option value="2012" data-tournament="Euro">Евро 2012</option>
-          <option value="2024" data-tournament="Copa America">Копа Америка 2024</option>
-          <option value="2021" data-tournament="Copa America">Копа Америка 2021</option>
-          <option value="other" data-tournament="">Другой год (не турнир)</option>
+          <option value="2026" data-tournament="World Cup" data-confed="ANY">ЧМ 2026</option>
+          <option value="2022" data-tournament="World Cup" data-confed="ANY">ЧМ 2022</option>
+          <option value="2018" data-tournament="World Cup" data-confed="ANY">ЧМ 2018</option>
+          <option value="2014" data-tournament="World Cup" data-confed="ANY">ЧМ 2014</option>
+          <option value="2010" data-tournament="World Cup" data-confed="ANY">ЧМ 2010</option>
+          <option value="2024" data-tournament="Euro" data-confed="UEFA">Евро 2024</option>
+          <option value="2020" data-tournament="Euro" data-confed="UEFA">Евро 2020</option>
+          <option value="2016" data-tournament="Euro" data-confed="UEFA">Евро 2016</option>
+          <option value="2012" data-tournament="Euro" data-confed="UEFA">Евро 2012</option>
+          <option value="2024" data-tournament="Copa America" data-confed="CONMEBOL">Копа Америка 2024</option>
+          <option value="2021" data-tournament="Copa America" data-confed="CONMEBOL">Копа Америка 2021</option>
+          <option value="other" data-tournament="" data-confed="ANY">Другой год (не турнир)</option>
         </select>
       </div>
       <div class="field">
@@ -819,6 +819,67 @@
     crestBadge.textContent = CLUB_INITIALS[value] || value.slice(0, 3).toUpperCase();
     crestName.textContent = selectedOption.textContent;
     crestRow.style.display = 'flex';
+    updateTournamentOptions();
+  }
+
+  // Конфедерация каждой сборной — используется, чтобы не предлагать
+  // Копа Америка европейским командам и Евро южноамериканским
+  const TEAM_CONFEDERATION = {
+    "Brazil": "CONMEBOL", "Argentina": "CONMEBOL",
+    "Germany": "UEFA", "France": "UEFA", "Netherlands": "UEFA",
+    "England": "UEFA", "Italy": "UEFA", "Spain": "UEFA", "Russia": "UEFA",
+  };
+
+  // Конкретные турниры, где сборная реально НЕ участвовала (не прошла
+  // отбор либо была отстранена) — проверено по факту, не предположение:
+  // Россия отстранена ФИФА/УЕФА с 28.02.2022 (вторжение в Украину),
+  // бан продлён минимум до сезона 2026/27 — не играла ЧМ-2022, Евро-2024,
+  // не играет ЧМ-2026. Италия не прошла отбор на ЧМ-2018, ЧМ-2022,
+  // ЧМ-2026 (три подряд). Нидерланды не прошли отбор на Евро-2016 и ЧМ-2018.
+  const EXCLUDED_TOURNAMENTS = {
+    "Russia": [
+      { year: "2022", tournament: "World Cup" },
+      { year: "2024", tournament: "Euro" },
+      { year: "2026", tournament: "World Cup" },
+    ],
+    "Italy": [
+      { year: "2018", tournament: "World Cup" },
+      { year: "2022", tournament: "World Cup" },
+      { year: "2026", tournament: "World Cup" },
+    ],
+    "Netherlands": [
+      { year: "2016", tournament: "Euro" },
+      { year: "2018", tournament: "World Cup" },
+    ],
+  };
+
+  function updateTournamentOptions() {
+    const team = nationalSelect.value;
+    const confed = TEAM_CONFEDERATION[team];
+    const excluded = EXCLUDED_TOURNAMENTS[team] || [];
+
+    Array.from(seasonNationalSelect.options).forEach(opt => {
+      if (opt.value === "" || opt.value === "other") return; // плейсхолдер и "другой год" всегда доступны
+
+      const optConfed = opt.dataset.confed;
+      const optTournament = opt.dataset.tournament;
+      const optYear = opt.value;
+
+      const wrongConfed = confed && optConfed !== "ANY" && optConfed !== confed;
+      const isExcluded = excluded.some(e => e.year === optYear && e.tournament === optTournament);
+
+      const shouldHide = wrongConfed || isExcluded;
+      opt.hidden = shouldHide;
+      opt.disabled = shouldHide;
+    });
+
+    // Если сейчас выбран турнир, который только что скрыли — сбрасываем
+    // выбор, чтобы не остался невидимый некорректный вариант
+    const selected = seasonNationalSelect.selectedOptions[0];
+    if (selected && selected.hidden) {
+      seasonNationalSelect.value = "";
+      updateSeasonOtherVisibility();
+    }
   }
   clubSelect.addEventListener('change', updateClubCrest);
   nationalSelect.addEventListener('change', updateClubCrest);
