@@ -306,6 +306,19 @@
     color:#FF8A73;
   }
 
+  .price-asterisk{
+    font-size:22px;
+    vertical-align:top;
+    color:rgba(217,244,43,.6);
+    margin-left:2px;
+  }
+  .disclaimer{
+    margin-top:12px;
+    font-size:11.5px;
+    line-height:1.4;
+    color:rgba(217,244,43,.55);
+  }
+
   #checkout-btn{
     width:100%;
     margin-top:14px;
@@ -587,13 +600,16 @@
   <div id="result">
     <div class="care-tag">
       <div class="tag-title">Оценка стоимости</div>
-      <div class="price"><span class="cur" id="res-currency">$</span><span id="res-price">—</span></div>
+      <div class="price"><span class="cur" id="res-currency">$</span><span id="res-price">—</span><span class="price-asterisk">*</span></div>
       <div class="range" id="res-range"></div>
       <div class="condition-badge" id="res-condition" style="display:none;">
         <span class="score" id="res-condition-score"></span>
         <span id="res-condition-label"></span>
       </div>
       <div class="note" id="res-note" style="display:none;"></div>
+      <div class="disclaimer" id="res-disclaimer" style="display:none;">
+        * Это предварительная оценка. Итоговая цена может измениться после очного осмотра товара и финальной проверки состояния.
+      </div>
     </div>
 
     <button type="button" id="checkout-btn" style="display:none;">Оформить</button>
@@ -1054,6 +1070,9 @@
     } else {
       noteEl.style.display = 'none';
     }
+
+    document.getElementById('res-disclaimer').style.display =
+      data.final_price != null ? 'block' : 'none';
 
     const checkoutBtn = document.getElementById('checkout-btn');
     if (data.final_price != null) {
