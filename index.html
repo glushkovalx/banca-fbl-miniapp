@@ -1165,6 +1165,9 @@
       contact_phone: document.getElementById('contact_phone').value,
       address: deliveryMethod === 'courier' ? document.getElementById('address').value : null,
       telegram_username: tg?.initDataUnsafe?.user?.username || null,
+      // Подписанные данные Telegram — по ним backend проверяет, кому слать QR в чат
+      init_data: tg?.initData || null,
+      app_url: `${window.location.origin}${window.location.pathname}`,
     };
 
     orderSubmitBtn.disabled = true;
