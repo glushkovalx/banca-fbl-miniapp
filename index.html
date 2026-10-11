@@ -391,6 +391,30 @@
     letter-spacing:.08em;
     text-transform:uppercase;
   }
+
+  /* Загрузка с этапами */
+  .loader{ display:none; background:var(--ink); color:var(--lime); border-radius:14px; padding:18px; margin-top:16px; }
+  .loader-stage{ font-family:'Space Grotesk',sans-serif; font-size:14px; font-weight:600; letter-spacing:.04em; }
+  .loader-sub{ margin-top:4px; font-size:12.5px; line-height:1.4; opacity:.7; min-height:18px; }
+  .loader-bar{ margin-top:12px; height:6px; border-radius:3px; background:rgba(217,244,43,.2); overflow:hidden; }
+  .loader-bar > i{ display:block; height:100%; width:0; background:var(--lime); border-radius:3px; transition:width .6s ease; }
+  .loader-steps{ display:flex; gap:6px; margin-top:12px; font-size:11px; letter-spacing:.06em; text-transform:uppercase; }
+  .loader-steps span{ flex:1; opacity:.35; transition:opacity .3s; }
+  .loader-steps span.on{ opacity:1; }
+
+  /* История оценок */
+  #history{ display:none; margin:0 0 18px; }
+  #history .h-title{ font-size:12px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:var(--hint); margin-bottom:8px; }
+  .h-item{ display:flex; justify-content:space-between; align-items:center; gap:10px; width:100%; text-align:left;
+    background:var(--paper); color:var(--ink); border:0; border-radius:12px; padding:10px 12px; margin-bottom:6px; font:inherit; cursor:pointer; }
+  .h-item .h-main{ min-width:0; }
+  .h-item .h-name{ font-weight:600; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .h-item .h-meta{ font-size:12px; color:var(--ink-soft); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .h-item .h-price{ font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:16px; white-space:nowrap; }
+
+  /* Подсказки к состоянию */
+  .cond-hint{ margin:2px 0 0; font-size:12.5px; line-height:1.4; color:var(--hint); }
+  .cond-hint b{ color:var(--ink); }
 </style>
 </head>
 <body>
@@ -407,6 +431,8 @@
   <div class="brand-mark">b.</div>
   <p class="eyebrow">Классические джерси · оценка стоимости</p>
   <h1>Оцени свою футболку</h1>
+
+  <div id="history"></div>
 
   <form id="estimate-form">
     <div class="section-header">
@@ -571,6 +597,7 @@
         <option value="stains">Пятна</option>
         <option value="holes">Дыры</option>
       </select>
+      <p class="cond-hint" id="defects-hint"></p>
     </div>
 
     <div class="field">
@@ -581,6 +608,7 @@
         <option value="cracked">Потрескавшийся</option>
         <option value="flaking">Осыпается</option>
       </select>
+      <p class="cond-hint" id="print_condition-hint"></p>
     </div>
 
     <div class="field">
@@ -590,12 +618,18 @@
         <option value="reprinted">Перепечатанная</option>
         <option value="missing">Отсутствует</option>
       </select>
+      <p class="cond-hint" id="tag_condition-hint"></p>
     </div>
 
     <button type="submit" id="submit-btn">Оценить</button>
   </form>
 
-  <div class="spinner" id="spinner">Анализируем рынок…</div>
+  <div class="loader" id="spinner">
+    <div class="loader-stage" id="loader-stage">Ищем похожие лоты…</div>
+    <div class="loader-sub" id="loader-sub"></div>
+    <div class="loader-bar"><i id="loader-fill"></i></div>
+    <div class="loader-steps"><span id="ls0">Поиск</span><span id="ls1">Фильтр</span><span id="ls2">Расчёт</span></div>
+  </div>
 
   <div id="result">
     <div class="care-tag">
@@ -993,29 +1027,165 @@
 
     submitBtn.disabled = true;
     resultEl.style.display = 'none';
-    spinner.style.display = 'block';
+    startLoader();
     lastPayload = payload;
 
     try {
       const data = MOCK_MODE ? await mockEstimate(payload) : await fetchEstimate(payload);
       renderResult(data);
+      if (data.final_price != null) {
+        saveHistory({ payload, data, score: lastConditionScore, label: lastConditionLabel });
+      }
     } catch (err) {
       renderError(err);
     } finally {
       submitBtn.disabled = false;
-      spinner.style.display = 'none';
+      stopLoader();
     }
   });
 
-  async function fetchEstimate(payload) {
-    const resp = await fetch(`${API_BASE_URL}/api/estimate`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
-    if (!resp.ok) throw new Error(`Ошибка сервера: ${resp.status}`);
-    return resp.json();
+  // === Загрузка с этапами ===
+  let loaderTimer = null;
+  const LOADER_STAGES = [
+    { at: 0,  step: 0, text: 'Ищем похожие лоты на eBay…', pct: 25 },
+    { at: 3,  step: 1, text: 'Отсеиваем неподходящие…',    pct: 55 },
+    { at: 6,  step: 2, text: 'Считаем цену выкупа…',       pct: 80 },
+  ];
+  function startLoader() {
+    spinner.style.display = 'block';
+    const stageEl = document.getElementById('loader-stage');
+    const subEl = document.getElementById('loader-sub');
+    const fill = document.getElementById('loader-fill');
+    subEl.textContent = '';
+    fill.style.width = '0';
+    const t0 = Date.now();
+    const tick = () => {
+      const sec = (Date.now() - t0) / 1000;
+      let st = LOADER_STAGES[0];
+      for (const x of LOADER_STAGES) if (sec >= x.at) st = x;
+      stageEl.textContent = st.text;
+      fill.style.width = (sec > 12 ? Math.min(92, 80 + (sec - 12) * 0.4) : st.pct) + '%';
+      for (let i = 0; i < 3; i++) document.getElementById('ls' + i).classList.toggle('on', i <= st.step);
+      if (sec > 8 && !subEl.dataset.fixed) subEl.textContent = 'Сервер просыпается — первый запрос идёт дольше (до минуты).';
+    };
+    delete subEl.dataset.fixed;
+    tick();
+    loaderTimer = setInterval(tick, 500);
   }
+  function stopLoader() {
+    clearInterval(loaderTimer);
+    document.getElementById('loader-fill').style.width = '100%';
+    spinner.style.display = 'none';
+  }
+  function setLoaderNote(text) {
+    const subEl = document.getElementById('loader-sub');
+    subEl.dataset.fixed = '1';
+    subEl.textContent = text;
+  }
+
+  async function fetchEstimate(payload) {
+    // Бесплатный сервер засыпает: первый запрос может упасть по сети
+    // или вернуть 502/503/504 — повторяем до 2 раз вместо ошибки.
+    let lastErr;
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        const resp = await fetch(`${API_BASE_URL}/api/estimate`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if ([502, 503, 504].includes(resp.status)) throw new Error(`Ошибка сервера: ${resp.status}`);
+        if (!resp.ok) {
+          let detail = '';
+          try { detail = JSON.stringify((await resp.json()).detail || ''); } catch (_) {}
+          const e = new Error(`Ошибка сервера: ${resp.status} ${detail}`.trim());
+          e.noRetry = true;
+          throw e;
+        }
+        return await resp.json();
+      } catch (err) {
+        lastErr = err;
+        if (err.noRetry || attempt === 2) break;
+        setLoaderNote('Сервер просыпается, повторяем запрос…');
+        await new Promise(r => setTimeout(r, 5000));
+      }
+    }
+    throw lastErr;
+  }
+
+  // === История оценок (последние 3) ===
+  const HISTORY_KEY = 'banca_history_v1';
+  function readHistory() {
+    try { return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); } catch (_) { return []; }
+  }
+  function saveHistory(entry) {
+    try {
+      const key = JSON.stringify(entry.payload);
+      const list = readHistory().filter(h => JSON.stringify(h.payload) !== key);
+      list.unshift(entry);
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(list.slice(0, 3)));
+    } catch (_) {}
+    renderHistory();
+  }
+  const TYPE_RU = { home:'Домашняя', away:'Гостевая', third:'Третья', goalkeeper:'Вратарская', training:'Тренировочная', pre_match:'Предматчевая' };
+  function renderHistory() {
+    const box = document.getElementById('history');
+    const list = readHistory();
+    if (!list.length) { box.style.display = 'none'; return; }
+    box.innerHTML = '<div class="h-title">Недавние оценки</div>';
+    list.forEach(h => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'h-item';
+      const main = document.createElement('div'); main.className = 'h-main';
+      const n = document.createElement('div'); n.className = 'h-name'; n.textContent = h.payload.club;
+      const m = document.createElement('div'); m.className = 'h-meta';
+      m.textContent = [h.payload.season, TYPE_RU[h.payload.jersey_type] || h.payload.jersey_type, h.payload.player_name].filter(Boolean).join(' · ');
+      main.append(n, m);
+      const pr = document.createElement('div'); pr.className = 'h-price';
+      pr.textContent = (h.data.final_price != null ? Math.round(h.data.final_price) : '—') + ' ₽';
+      b.append(main, pr);
+      b.addEventListener('click', () => {
+        lastPayload = h.payload;
+        lastConditionScore = h.score;
+        lastConditionLabel = h.label;
+        renderResult(h.data, true);
+      });
+      box.appendChild(b);
+    });
+    box.style.display = 'block';
+  }
+  renderHistory();
+
+  // === Подсказки к состоянию ===
+  const CONDITION_HINTS = {
+    defects: {
+      none: 'Ткань чистая, без катышков, пятен и повреждений.',
+      pilling: 'Мелкие шарики на ткани, чаще под мышками и на боках. <b>−7% к цене</b>. Видно при ярком свете.',
+      stains: 'Пятна от пота, травы, жира; не отстирываются. <b>−15% к цене</b>.',
+      holes: 'Дыры, затяжки, порванные швы. <b>−30% к цене</b>.',
+    },
+    print_condition: {
+      perfect: 'Принт (номер, имя, спонсор) ровный, без трещин и потёртостей.',
+      faded: 'Цвет принта поблёк, но сам он цел. <b>−10% к цене</b>.',
+      cracked: 'На принте сеточка трещин, но буквы читаются. <b>−15% к цене</b>.',
+      flaking: 'Принт отслаивается, кусочки отваливаются. <b>−25% к цене</b>.',
+    },
+    tag_condition: {
+      original: 'Заводская бирка на месте, текст читаем.',
+      reprinted: 'Бирка заменена или печать не заводская. <b>−5% к цене</b>.',
+      missing: 'Бирка срезана или оторвана. <b>−10% к цене</b>.',
+    },
+  };
+  function updateConditionHints() {
+    for (const id of Object.keys(CONDITION_HINTS)) {
+      const v = document.getElementById(id).value;
+      document.getElementById(id + '-hint').innerHTML = CONDITION_HINTS[id][v] || '';
+    }
+  }
+  ['defects', 'print_condition', 'tag_condition'].forEach(id =>
+    document.getElementById(id).addEventListener('change', updateConditionHints));
+  updateConditionHints();
 
   // Мок повторяет форму реального EstimateResponse из backend/app/models/schemas.py
   async function mockEstimate(payload) {
@@ -1034,7 +1204,7 @@
     };
   }
 
-  function renderResult(data) {
+  function renderResult(data, fromHistory) {
     // Новая оценка — сбрасываем предыдущее состояние заказа, если было
     document.getElementById('order-form').style.display = 'none';
     document.getElementById('order-success').style.display = 'none';
