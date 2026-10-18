@@ -415,6 +415,17 @@
   /* Подсказки к состоянию */
   .cond-hint{ margin:2px 0 0; font-size:12.5px; line-height:1.4; color:var(--hint); }
   .cond-hint b{ color:var(--ink); }
+
+  /* Фото футболки */
+  .opt{ text-transform:none; letter-spacing:0; font-weight:400; }
+  .photo-add{ background:transparent; color:var(--ink); border:2px dashed var(--ink); border-radius:12px; padding:12px; font:inherit; font-weight:600; cursor:pointer; width:100%; }
+  .care-tag .photo-add{ color:var(--lime); border-color:var(--lime); margin-top:10px; }
+  .photo-thumbs{ display:grid; grid-template-columns:repeat(auto-fill,minmax(0,72px)); gap:8px; }
+  .photo-thumbs:empty{ display:none; }
+  .photo-thumb{ position:relative; width:72px; height:72px; border-radius:10px; overflow:hidden; background:var(--ink); }
+  .photo-thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .photo-thumb button{ position:absolute; top:3px; right:3px; width:22px; height:22px; border:0; border-radius:50%; background:rgba(16,16,20,.8); color:var(--lime); font-size:14px; line-height:22px; padding:0; cursor:pointer; }
+  .photo-status{ margin-top:10px; font-size:13px; text-align:center; opacity:.85; }
 </style>
 </head>
 <body>
@@ -682,6 +693,14 @@
         <input id="address" type="text" placeholder="Город, улица, дом, квартира">
       </div>
 
+      <div class="field">
+        <label>Фото футболки <span class="opt">(по желанию, до 5)</span></label>
+        <p class="field-hint">Общий вид, принт, бирка и дефекты, если есть. По фото мы точнее назовём итоговую цену.</p>
+        <input id="photo-input" type="file" accept="image/*" multiple hidden>
+        <button type="button" id="photo-add-btn" class="photo-add">+ Добавить фото</button>
+        <div id="photo-thumbs" class="photo-thumbs"></div>
+      </div>
+
       <button type="submit" id="order-submit-btn">Подтвердить заказ</button>
     </form>
 
@@ -691,6 +710,8 @@
         <img id="order-qr" class="order-qr-img" alt="QR-код заказа">
         <div class="order-id" id="order-id-text"></div>
         <div class="range" id="order-delivery-text"></div>
+        <div class="photo-status" id="photo-status"></div>
+        <button type="button" id="photo-retry-btn" class="photo-add" style="display:none;">Отправить фото ещё раз</button>
       </div>
     </div>
   </div>
@@ -1177,6 +1198,7 @@
       missing: 'Бирка срезана или оторвана. <b>−10% к цене</b>.',
     },
   };
+
   function updateConditionHints() {
     for (const id of Object.keys(CONDITION_HINTS)) {
       const v = document.getElementById(id).value;
@@ -1350,12 +1372,108 @@
       if (!resp.ok) throw new Error(`Ошибка сервера: ${resp.status}`);
       const orderData = await resp.json();
       renderOrderSuccess(orderData, deliveryMethod);
+      uploadPhotos(orderData.order_id);
     } catch (err) {
       alert('Не удалось оформить заказ: ' + err.message);
     } finally {
       orderSubmitBtn.disabled = false;
     }
   });
+
+
+  // === Фото футболки ===
+  const MAX_PHOTOS = 5;
+  let selectedPhotos = [];   // { blob, url }
+  const photoInput = document.getElementById('photo-input');
+  const photoAddBtn = document.getElementById('photo-add-btn');
+  const photoThumbs = document.getElementById('photo-thumbs');
+
+  // Сжимаем до 1600px по длинной стороне, JPEG: быстрее грузится и укладывается в лимиты Telegram
+  async function compressImage(file) {
+    const url = URL.createObjectURL(file);
+    try {
+      const img = await new Promise((res, rej) => {
+        const i = new Image();
+        i.onload = () => res(i);
+        i.onerror = () => rej(new Error('Не удалось прочитать изображение'));
+        i.src = url;
+      });
+      const scale = Math.min(1, 1600 / Math.max(img.naturalWidth, img.naturalHeight));
+      const w = Math.max(1, Math.round(img.naturalWidth * scale));
+      const h = Math.max(1, Math.round(img.naturalHeight * scale));
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      return await new Promise((res, rej) =>
+        canvas.toBlob(b => b ? res(b) : rej(new Error('Не удалось сжать фото')), 'image/jpeg', 0.85));
+    } finally {
+      URL.revokeObjectURL(url);
+    }
+  }
+
+  function renderThumbs() {
+    photoThumbs.innerHTML = '';
+    selectedPhotos.forEach((p, idx) => {
+      const box = document.createElement('div'); box.className = 'photo-thumb';
+      const img = document.createElement('img'); img.src = p.url; img.alt = '';
+      const del = document.createElement('button'); del.type = 'button'; del.textContent = '×';
+      del.setAttribute('aria-label', 'Убрать фото');
+      del.addEventListener('click', () => {
+        URL.revokeObjectURL(p.url);
+        selectedPhotos.splice(idx, 1);
+        renderThumbs();
+      });
+      box.append(img, del);
+      photoThumbs.appendChild(box);
+    });
+    photoAddBtn.style.display = selectedPhotos.length >= MAX_PHOTOS ? 'none' : '';
+  }
+
+  photoAddBtn.addEventListener('click', () => photoInput.click());
+  photoInput.addEventListener('change', async () => {
+    const files = Array.from(photoInput.files || []).slice(0, MAX_PHOTOS - selectedPhotos.length);
+    photoInput.value = '';
+    for (const f of files) {
+      try {
+        const blob = await compressImage(f);
+        selectedPhotos.push({ blob, url: URL.createObjectURL(blob) });
+      } catch (e) {
+        alert('Не удалось добавить фото: ' + e.message);
+      }
+    }
+    renderThumbs();
+  });
+
+  async function uploadPhotos(orderId) {
+    const statusEl = document.getElementById('photo-status');
+    const retryBtn = document.getElementById('photo-retry-btn');
+    if (!selectedPhotos.length) { statusEl.textContent = ''; retryBtn.style.display = 'none'; return; }
+    retryBtn.style.display = 'none';
+    statusEl.textContent = 'Отправляем фото…';
+    try {
+      const fd = new FormData();
+      selectedPhotos.forEach((p, i) => fd.append('photos', p.blob, `photo${i + 1}.jpg`));
+      let resp;
+      for (let attempt = 0; attempt < 2; attempt++) {
+        try {
+          resp = await fetch(`${API_BASE_URL}/api/order/${orderId}/photos`, { method: 'POST', body: fd });
+          break;
+        } catch (e) {
+          if (attempt === 1) throw e;
+          await new Promise(r => setTimeout(r, 3000));
+        }
+      }
+      if (!resp.ok) throw new Error(`Ошибка ${resp.status}`);
+      statusEl.textContent = `Фото отправлены: ${selectedPhotos.length}`;
+      selectedPhotos.forEach(p => URL.revokeObjectURL(p.url));
+      selectedPhotos = [];
+      renderThumbs();
+    } catch (err) {
+      statusEl.textContent = 'Заказ оформлен, но фото не отправились.';
+      retryBtn.style.display = 'block';
+      retryBtn.onclick = () => uploadPhotos(orderId);
+    }
+  }
 
   function renderOrderSuccess(orderData, deliveryMethod) {
     orderForm.style.display = 'none';
