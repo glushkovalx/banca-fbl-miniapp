@@ -426,6 +426,17 @@
   .photo-thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
   .photo-thumb button{ position:absolute; top:3px; right:3px; width:22px; height:22px; border:0; border-radius:50%; background:rgba(16,16,20,.8); color:var(--lime); font-size:14px; line-height:22px; padding:0; cursor:pointer; }
   .photo-status{ margin-top:10px; font-size:13px; text-align:center; opacity:.85; }
+
+  /* Подсказки игроков */
+  .ac-wrap{ position:relative; }
+  .ac-list{ position:absolute; z-index:30; left:0; top:calc(100% + 4px); min-width:100%; width:max-content; max-width:min(300px, calc(100vw - 32px));
+    margin:0; padding:4px; list-style:none; background:var(--paper); color:var(--ink); border-radius:12px;
+    box-shadow:0 8px 24px rgba(16,16,20,.25); }
+  .ac-list[hidden]{ display:none; }
+  .ac-item{ padding:9px 10px; border-radius:8px; cursor:pointer; display:flex; flex-direction:column; gap:1px; }
+  .ac-item.active, .ac-item:hover{ background:var(--lime); }
+  .ac-item .ac-main{ font-weight:600; font-size:14px; }
+  .ac-item .ac-sub{ font-size:12px; color:var(--ink-soft); }
 </style>
 </head>
 <body>
@@ -568,7 +579,7 @@
     <div class="row-2">
       <div class="field">
         <label for="player_name">Игрок (если есть)</label>
-        <input id="player_name" name="player_name" type="text" placeholder="Messi">
+        <div class="ac-wrap"><input id="player_name" name="player_name" type="text" placeholder="Messi / Месси" autocomplete="off" autocapitalize="words" spellcheck="false" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="player-suggest"><ul class="ac-list" id="player-suggest" role="listbox" hidden></ul></div>
       </div>
       <div class="field">
         <label for="player_number">Номер</label>
@@ -1474,6 +1485,292 @@
       retryBtn.onclick = () => uploadPhotos(orderId);
     }
   }
+
+
+  // === Подсказки по игрокам ===
+  // [что подставляем (латиница, как в заголовках eBay), по-русски, подпись (если отличается), команды]
+  const PLAYERS = [
+    ["Messi","Месси","","Barcelona,Argentina,Paris Saint-Germain"],
+    ["Ronaldo","Роналду Криштиану","Cristiano Ronaldo","Real Madrid,Manchester United,Juventus"],
+    ["Ronaldo Nazario","Роналдо Назарио","Ronaldo Nazário (R9)","Barcelona,Inter Milan,Real Madrid,AC Milan,PSV,Brazil"],
+    ["Mbappe","Мбаппе","Mbappé","Paris Saint-Germain,Real Madrid,France"],
+    ["Neymar","Неймар","","Barcelona,Paris Saint-Germain,Brazil"],
+    ["Haaland","Холанд","Haaland","Manchester City,Borussia Dortmund"],
+    ["Benzema","Бензема","","Real Madrid,France"],
+    ["Modric","Модрич","Modrić","Real Madrid,Tottenham"],
+    ["Lewandowski","Левандовски","","Bayern Munich,Borussia Dortmund,Barcelona"],
+    ["Salah","Салах","","Liverpool,Roma"],
+    ["Mane","Мане","Mané","Liverpool,Bayern Munich"],
+    ["Kane","Кейн","","Tottenham,Bayern Munich,England"],
+    ["Son","Сон Хын Мин","Son Heung-min","Tottenham"],
+    ["De Bruyne","Де Брёйне","","Manchester City"],
+    ["Griezmann","Гризманн","","Atletico Madrid,Barcelona,France"],
+    ["Zidane","Зидан","","Real Madrid,Juventus,France"],
+    ["Ronaldinho","Роналдиньо","","Barcelona,AC Milan,Brazil"],
+    ["Henry","Анри","","Arsenal,Barcelona,France"],
+    ["Beckham","Бекхэм","","Manchester United,Real Madrid,AC Milan,England"],
+    ["Rooney","Руни","","Manchester United,England"],
+    ["Gerrard","Джеррард","","Liverpool,England"],
+    ["Lampard","Лэмпард","","Chelsea,England"],
+    ["Drogba","Дрогба","","Chelsea"],
+    ["Terry","Терри","","Chelsea,England"],
+    ["Cech","Чех","Čech","Chelsea,Arsenal"],
+    ["Hazard","Азар","","Chelsea,Real Madrid"],
+    ["Maldini","Мальдини","","AC Milan,Italy"],
+    ["Pirlo","Пирло","","AC Milan,Juventus,Inter Milan,Italy"],
+    ["Totti","Тотти","","Roma,Italy"],
+    ["Del Piero","Дель Пьеро","","Juventus,Italy"],
+    ["Baggio","Баджо","","Juventus,AC Milan,Inter Milan,Italy"],
+    ["Buffon","Буффон","","Juventus,Paris Saint-Germain,Italy"],
+    ["Nedved","Недвед","Nedvěd","Juventus"],
+    ["Trezeguet","Трезеге","","Juventus"],
+    ["Dybala","Дибала","","Juventus,Roma,Argentina"],
+    ["Tevez","Тевес","","Manchester City,Manchester United,Juventus,Argentina"],
+    ["Vidal","Видаль","","Juventus,Bayern Munich,Barcelona"],
+    ["Pogba","Погба","","Manchester United,Juventus,France"],
+    ["Cantona","Кантона","","Manchester United"],
+    ["Giggs","Гиггз","","Manchester United"],
+    ["Scholes","Скоулз","","Manchester United,England"],
+    ["Keane","Кин","","Manchester United"],
+    ["Ferdinand","Фердинанд","","Manchester United,England"],
+    ["Vidic","Видич","Vidić","Manchester United"],
+    ["Van der Sar","Ван дер Сар","","Manchester United,Netherlands"],
+    ["Schmeichel","Шмейхель","","Manchester United"],
+    ["Van Nistelrooy","Ван Нистелрой","","Manchester United,Real Madrid,PSV,Netherlands"],
+    ["Solskjaer","Сульшер","Solskjær","Manchester United"],
+    ["Rashford","Рэшфорд","","Manchester United,England"],
+    ["Fernandes","Бруну Фернандеш","Bruno Fernandes","Manchester United"],
+    ["Owen","Оуэн","","Liverpool,Real Madrid,England"],
+    ["Fowler","Фаулер","","Liverpool"],
+    ["Carragher","Каррагер","","Liverpool"],
+    ["Torres","Торрес","","Liverpool,Chelsea,Atletico Madrid,Spain"],
+    ["Alonso","Хаби Алонсо","Xabi Alonso","Liverpool,Real Madrid,Bayern Munich,Spain"],
+    ["Van Dijk","Ван Дейк","","Liverpool"],
+    ["Firmino","Фирмино","","Liverpool"],
+    ["Bergkamp","Бергкамп","","Arsenal,Inter Milan,Ajax,Netherlands"],
+    ["Vieira","Вьейра","Vieira","Arsenal,Juventus,Inter Milan,France"],
+    ["Pires","Пирес","","Arsenal,France"],
+    ["Fabregas","Фабрегас","Fàbregas","Arsenal,Barcelona,Chelsea,Spain"],
+    ["Van Persie","Ван Перси","","Arsenal,Manchester United,Feyenoord,Netherlands"],
+    ["Adams","Адамс","","Arsenal"],
+    ["Ozil","Озил","Özil","Arsenal,Real Madrid,Germany"],
+    ["Saka","Сака","","Arsenal,England"],
+    ["Odegaard","Эдегор","Ødegaard","Arsenal,Real Madrid"],
+    ["Zola","Дзола","","Chelsea,Italy"],
+    ["Essien","Эссьен","","Chelsea"],
+    ["Cole","Коул","","Arsenal,Chelsea,England"],
+    ["Shevchenko","Шевченко","","AC Milan,Chelsea"],
+    ["Inzaghi","Индзаги","","AC Milan,Juventus,Italy"],
+    ["Gattuso","Гаттузо","","AC Milan,Italy"],
+    ["Seedorf","Зеедорф","","AC Milan,Ajax,Real Madrid,Inter Milan,Netherlands"],
+    ["Van Basten","Ван Бастен","","AC Milan,Ajax,Netherlands"],
+    ["Gullit","Гуллит","","AC Milan,Netherlands"],
+    ["Baresi","Барези","","AC Milan,Italy"],
+    ["Kaka","Кака","Kaká","AC Milan,Real Madrid,Brazil"],
+    ["Leao","Леау","Leão","AC Milan"],
+    ["Ibrahimovic","Ибрагимович","Ibrahimović","AC Milan,Inter Milan,Juventus,Barcelona,Paris Saint-Germain,Manchester United,Ajax"],
+    ["Zanetti","Дзанетти","","Inter Milan,Argentina"],
+    ["Adriano","Адриано","","Inter Milan,Brazil"],
+    ["Milito","Милито","","Inter Milan,Argentina"],
+    ["Sneijder","Снейдер","","Inter Milan,Ajax,Real Madrid,Netherlands"],
+    ["Eto'o","Это'о","","Inter Milan,Barcelona"],
+    ["Vieri","Вьери","","Inter Milan,Juventus,Italy"],
+    ["Recoba","Рекоба","","Inter Milan"],
+    ["Lukaku","Лукаку","","Inter Milan,Chelsea,Manchester United,Roma"],
+    ["Xavi","Хави","","Barcelona,Spain"],
+    ["Iniesta","Иньеста","","Barcelona,Spain"],
+    ["Puyol","Пуйоль","","Barcelona,Spain"],
+    ["Busquets","Бускетс","","Barcelona,Spain"],
+    ["Pique","Пике","Piqué","Barcelona,Spain"],
+    ["Suarez","Суарес","Suárez","Barcelona,Liverpool,Atletico Madrid"],
+    ["Rivaldo","Ривалдо","","Barcelona,AC Milan,Brazil"],
+    ["Stoichkov","Стоичков","","Barcelona"],
+    ["Romario","Ромарио","Romário","Barcelona,PSV,Brazil"],
+    ["Kluivert","Клуйверт","","Barcelona,Ajax,Netherlands"],
+    ["Yamal","Ямаль","Lamine Yamal","Barcelona,Spain"],
+    ["Pedri","Педри","","Barcelona,Spain"],
+    ["Gavi","Гави","","Barcelona,Spain"],
+    ["Raul","Рауль","Raúl","Real Madrid,Spain"],
+    ["Figo","Фигу","","Real Madrid,Barcelona,Inter Milan"],
+    ["Roberto Carlos","Роберто Карлос","","Real Madrid,Brazil"],
+    ["Ramos","Рамос","Sergio Ramos","Real Madrid,Paris Saint-Germain,Spain"],
+    ["Casillas","Касильяс","","Real Madrid,Porto,Spain"],
+    ["Kroos","Кроос","","Real Madrid,Bayern Munich,Germany"],
+    ["Marcelo","Марсело","","Real Madrid,Brazil"],
+    ["Vinicius","Винисиус","Vinícius Jr","Real Madrid,Brazil"],
+    ["Bellingham","Беллингем","","Real Madrid,Borussia Dortmund,England"],
+    ["Bale","Бэйл","","Real Madrid,Tottenham"],
+    ["Di Maria","Ди Мария","Di María","Real Madrid,Paris Saint-Germain,Juventus,Benfica,Argentina"],
+    ["Courtois","Куртуа","","Real Madrid,Chelsea,Atletico Madrid"],
+    ["Muller","Мюллер","Müller","Bayern Munich,Germany"],
+    ["Neuer","Нойер","","Bayern Munich,Germany"],
+    ["Lahm","Лам","","Bayern Munich,Germany"],
+    ["Robben","Роббен","","Bayern Munich,Chelsea,Real Madrid,Netherlands"],
+    ["Ribery","Рибери","Ribéry","Bayern Munich,France"],
+    ["Kahn","Кан","","Bayern Munich,Germany"],
+    ["Schweinsteiger","Швайнштайгер","","Bayern Munich,Manchester United,Germany"],
+    ["Matthaus","Маттеус","Matthäus","Bayern Munich,Inter Milan,Germany"],
+    ["Klose","Клозе","","Bayern Munich,Germany"],
+    ["Ballack","Баллак","","Bayern Munich,Chelsea,Germany"],
+    ["Klinsmann","Клинсманн","","Bayern Munich,Tottenham,Inter Milan,Germany"],
+    ["Beckenbauer","Беккенбауэр","","Bayern Munich,Germany"],
+    ["Verratti","Верратти","","Paris Saint-Germain,Italy"],
+    ["Cavani","Кавани","","Paris Saint-Germain,Napoli,Manchester United"],
+    ["Thiago Silva","Тьяго Силва","","Paris Saint-Germain,AC Milan,Chelsea,Brazil"],
+    ["Marquinhos","Маркиньос","","Paris Saint-Germain,Brazil"],
+    ["Pastore","Пасторе","","Paris Saint-Germain,Roma"],
+    ["Aguero","Агуэро","Agüero","Manchester City,Atletico Madrid,Barcelona,Argentina"],
+    ["Silva","Давид Силва","David Silva","Manchester City,Spain"],
+    ["Kompany","Компани","","Manchester City"],
+    ["Foden","Фоден","","Manchester City,England"],
+    ["Toure","Яя Туре","Yaya Touré","Manchester City,Barcelona"],
+    ["Lloris","Льорис","","Tottenham,France"],
+    ["Ginola","Жинола","","Tottenham,Newcastle,France"],
+    ["Reus","Ройс","","Borussia Dortmund,Germany"],
+    ["Sancho","Санчо","","Borussia Dortmund,Manchester United,England"],
+    ["Kagawa","Кагава","","Borussia Dortmund,Manchester United"],
+    ["Maradona","Марадона","","Napoli,Barcelona,Argentina"],
+    ["Higuain","Игуаин","Higuaín","Napoli,Juventus,Real Madrid,Argentina"],
+    ["Insigne","Инсинье","","Napoli,Italy"],
+    ["Lavezzi","Лавесси","","Napoli,Paris Saint-Germain,Argentina"],
+    ["Hamsik","Хамшик","Hamšík","Napoli"],
+    ["Kvaratskhelia","Кварацхелия","","Napoli,Paris Saint-Germain"],
+    ["De Rossi","Де Росси","","Roma,Italy"],
+    ["Batistuta","Батистута","","Roma,Argentina"],
+    ["Dzeko","Джеко","Džeko","Roma,Manchester City,Inter Milan"],
+    ["Forlan","Форлан","Forlán","Atletico Madrid,Manchester United,Inter Milan"],
+    ["Simeone","Симеоне","","Atletico Madrid,Inter Milan,Argentina"],
+    ["Godin","Годин","","Atletico Madrid,Inter Milan"],
+    ["Costa","Диего Коста","Diego Costa","Atletico Madrid,Chelsea,Spain"],
+    ["Cruyff","Кройф","Cruyff","Ajax,Barcelona,Netherlands"],
+    ["Litmanen","Литманен","","Ajax,Liverpool"],
+    ["De Jong","Де Йонг","","Ajax,Barcelona,Netherlands"],
+    ["Overmars","Овермарс","","Ajax,Arsenal,Barcelona,Netherlands"],
+    ["Eusebio","Эусебио","Eusébio","Benfica"],
+    ["Rui Costa","Руй Кошта","","Benfica,AC Milan"],
+    ["Aimar","Аймар","","Benfica,Argentina"],
+    ["Deco","Деку","","Porto,Barcelona,Chelsea"],
+    ["Falcao","Фалькао","","Porto,Atletico Madrid,Manchester United"],
+    ["Hulk","Халк","","Porto,Zenit,Brazil"],
+    ["Quaresma","Куарешма","","Porto"],
+    ["Pele","Пеле","Pelé","Brazil"],
+    ["Zico","Зико","","Brazil"],
+    ["Cafu","Кафу","","AC Milan,Roma,Brazil"],
+    ["Riquelme","Рикельме","","Barcelona,Argentina"],
+    ["Crespo","Креспо","","Chelsea,AC Milan,Inter Milan,Argentina"],
+    ["Mascherano","Маскерано","","Barcelona,Liverpool,Argentina"],
+    ["Platini","Платини","","Juventus,France"],
+    ["Papin","Папен","","AC Milan,Bayern Munich,France"],
+    ["Deschamps","Дешам","","Juventus,Chelsea,France"],
+    ["Thuram","Тюрам","","Juventus,Barcelona,France"],
+    ["Desailly","Десайи","","AC Milan,Chelsea,France"],
+    ["Shearer","Ширер","","Newcastle,England"],
+    ["Arshavin","Аршавин","","Zenit,Arsenal,Russia"],
+    ["Kerzhakov","Кержаков","","Zenit,Russia"],
+    ["Dzyuba","Дзюба","","Zenit,Spartak Moscow,Russia"],
+    ["Danny","Дани","","Zenit"],
+    ["Shirokov","Широков","","Zenit,Russia"],
+    ["Zyryanov","Зырянов","","Zenit,Russia"],
+    ["Akinfeev","Акинфеев","","CSKA Moscow,Russia"],
+    ["Musa","Муса","","CSKA Moscow,Spartak Moscow"],
+    ["Golovin","Головин","","CSKA Moscow,Russia"],
+    ["Smolov","Смолов","","Lokomotiv Moscow,Russia"],
+    ["Zhirkov","Жирков","","CSKA Moscow,Zenit,Chelsea,Russia"],
+    ["Semak","Семак","","Zenit,Paris Saint-Germain,Russia"],
+    ["Pavlyuchenko","Павлюченко","","Spartak Moscow,Tottenham,Russia"],
+    ["Izmailov","Измайлов","","Lokomotiv Moscow,Russia"],
+    ["Cheryshev","Черышев","","Real Madrid,Russia"],
+    ["Ignashevich","Игнашевич","","CSKA Moscow,Lokomotiv Moscow,Russia"],
+    ["Karpin","Карпин","","Spartak Moscow,Russia"],
+    ["Titov","Титов","","Spartak Moscow,Russia"],
+    ["Kanchelskis","Канчельскис","","Manchester United,Russia"],
+    ["Yashin","Яшин","","Russia"],
+    ["Loskov","Лосков","","Lokomotiv Moscow,Russia"],
+    ["Sychev","Сычёв","","Lokomotiv Moscow,Russia"],
+    ["Samedov","Самедов","","Lokomotiv Moscow,Russia"],
+    ["Promes","Промес","","Spartak Moscow"],
+    ["Ananidze","Ананидзе","","Spartak Moscow"],
+  ];
+
+  const norm = (str) => (str || '').toLowerCase().replace(/ё/g, 'е')
+    .normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/['’`]/g, '');
+  const PLAYER_INDEX = PLAYERS.map(([fill, ru, label, teams]) => ({
+    fill, ru, label: label || fill, teams: teams.split(','),
+    hay: norm(`${fill} ${ru} ${label || ''}`),
+  }));
+
+  function selectedTeam() {
+    const national = document.querySelector('input[name="team_type"]:checked')?.value === 'national';
+    return (national ? nationalSelect : clubSelect).value || '';
+  }
+
+  function findPlayers(query) {
+    const q = norm(query).trim();
+    if (q.length < 2) return [];
+    const team = selectedTeam();
+    const score = (p, qq) => {
+      const words = p.hay.split(/[\s\-]+/);
+      let s = 0;
+      if (words.some(w => w.startsWith(qq))) s = 3;
+      else if (p.hay.includes(qq)) s = 1;
+      if (s && team && p.teams.includes(team)) s += 2;   // игроки выбранной команды выше
+      return s;
+    };
+    let res = PLAYER_INDEX.map((p, i) => ({ p, i, s: score(p, q) })).filter(x => x.s);
+    if (!res.length && q.length >= 4) {                    // мягкая поправка опечатки в конце слова
+      const cut = q.slice(0, -1);
+      res = PLAYER_INDEX.map((p, i) => ({ p, i, s: score(p, cut) })).filter(x => x.s);
+    }
+    res.sort((a, b) => b.s - a.s || a.i - b.i);
+    return res.slice(0, 6).map(x => x.p);
+  }
+
+  const playerInput = document.getElementById('player_name');
+  const suggestEl = document.getElementById('player-suggest');
+  let suggestItems = [];
+  let suggestActive = -1;
+
+  function closeSuggest() {
+    suggestEl.hidden = true;
+    playerInput.setAttribute('aria-expanded', 'false');
+    suggestActive = -1;
+  }
+  function pickPlayer(p) {
+    playerInput.value = p.fill;
+    closeSuggest();
+  }
+  function paintActive() {
+    Array.from(suggestEl.children).forEach((li, i) => li.classList.toggle('active', i === suggestActive));
+  }
+  function renderSuggest() {
+    suggestItems = findPlayers(playerInput.value);
+    suggestEl.innerHTML = '';
+    if (!suggestItems.length) { closeSuggest(); return; }
+    suggestItems.forEach((p) => {
+      const li = document.createElement('li');
+      li.className = 'ac-item'; li.setAttribute('role', 'option');
+      const main = document.createElement('span'); main.className = 'ac-main'; main.textContent = p.label;
+      const sub = document.createElement('span'); sub.className = 'ac-sub';
+      sub.textContent = `${p.ru} · ${p.teams.slice(0, 3).join(', ')}`;
+      li.append(main, sub);
+      // pointerdown, а не click: иначе поле теряет фокус раньше выбора
+      li.addEventListener('pointerdown', (e) => { e.preventDefault(); pickPlayer(p); });
+      suggestEl.appendChild(li);
+    });
+    suggestActive = -1;
+    suggestEl.hidden = false;
+    playerInput.setAttribute('aria-expanded', 'true');
+  }
+  playerInput.addEventListener('input', renderSuggest);
+  playerInput.addEventListener('focus', () => { if (playerInput.value.trim().length >= 2) renderSuggest(); });
+  playerInput.addEventListener('blur', () => setTimeout(closeSuggest, 120));
+  playerInput.addEventListener('keydown', (e) => {
+    if (suggestEl.hidden) return;
+    if (e.key === 'ArrowDown') { e.preventDefault(); suggestActive = (suggestActive + 1) % suggestItems.length; paintActive(); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); suggestActive = (suggestActive - 1 + suggestItems.length) % suggestItems.length; paintActive(); }
+    else if (e.key === 'Enter' && suggestActive >= 0) { e.preventDefault(); pickPlayer(suggestItems[suggestActive]); }
+    else if (e.key === 'Escape') closeSuggest();
+  });
 
   function renderOrderSuccess(orderData, deliveryMethod) {
     orderForm.style.display = 'none';
