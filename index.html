@@ -1838,200 +1838,200 @@
   // === Подсказки по игрокам ===
   // [что подставляем (латиница, как в заголовках eBay), по-русски, подпись (если отличается), команды]
   const PLAYERS = [
-    ["Messi","Месси","","Barcelona,Argentina,Paris Saint-Germain"],
-    ["Ronaldo","Роналду Криштиану","Cristiano Ronaldo","Real Madrid,Manchester United,Juventus"],
-    ["Ronaldo Nazario","Роналдо Назарио","Ronaldo Nazário (R9)","Barcelona,Inter Milan,Real Madrid,AC Milan,PSV,Brazil"],
-    ["Mbappe","Мбаппе","Mbappé","Paris Saint-Germain,Real Madrid,France"],
-    ["Neymar","Неймар","","Barcelona,Paris Saint-Germain,Brazil"],
-    ["Haaland","Холанд","Haaland","Manchester City,Borussia Dortmund"],
-    ["Benzema","Бензема","","Real Madrid,France"],
-    ["Modric","Модрич","Modrić","Real Madrid,Tottenham"],
-    ["Lewandowski","Левандовски","","Bayern Munich,Borussia Dortmund,Barcelona"],
-    ["Salah","Салах","","Liverpool,Roma"],
-    ["Mane","Мане","Mané","Liverpool,Bayern Munich"],
-    ["Kane","Кейн","","Tottenham,Bayern Munich,England"],
-    ["Son","Сон Хын Мин","Son Heung-min","Tottenham"],
-    ["De Bruyne","Де Брёйне","","Manchester City"],
-    ["Griezmann","Гризманн","","Atletico Madrid,Barcelona,France"],
-    ["Zidane","Зидан","","Real Madrid,Juventus,France"],
-    ["Ronaldinho","Роналдиньо","","Barcelona,AC Milan,Brazil"],
-    ["Henry","Анри","","Arsenal,Barcelona,France"],
-    ["Beckham","Бекхэм","","Manchester United,Real Madrid,AC Milan,England"],
-    ["Rooney","Руни","","Manchester United,England"],
-    ["Gerrard","Джеррард","","Liverpool,England"],
-    ["Lampard","Лэмпард","","Chelsea,England"],
-    ["Drogba","Дрогба","","Chelsea"],
-    ["Terry","Терри","","Chelsea,England"],
-    ["Cech","Чех","Čech","Chelsea,Arsenal"],
-    ["Hazard","Азар","","Chelsea,Real Madrid"],
-    ["Maldini","Мальдини","","AC Milan,Italy"],
-    ["Pirlo","Пирло","","AC Milan,Juventus,Inter Milan,Italy"],
-    ["Totti","Тотти","","Roma,Italy"],
-    ["Del Piero","Дель Пьеро","","Juventus,Italy"],
-    ["Baggio","Баджо","","Juventus,AC Milan,Inter Milan,Italy"],
-    ["Buffon","Буффон","","Juventus,Paris Saint-Germain,Italy"],
-    ["Nedved","Недвед","Nedvěd","Juventus"],
-    ["Trezeguet","Трезеге","","Juventus"],
-    ["Dybala","Дибала","","Juventus,Roma,Argentina"],
-    ["Tevez","Тевес","","Manchester City,Manchester United,Juventus,Argentina"],
-    ["Vidal","Видаль","","Juventus,Bayern Munich,Barcelona"],
-    ["Pogba","Погба","","Manchester United,Juventus,France"],
-    ["Cantona","Кантона","","Manchester United"],
-    ["Giggs","Гиггз","","Manchester United"],
-    ["Scholes","Скоулз","","Manchester United,England"],
-    ["Keane","Кин","","Manchester United"],
-    ["Ferdinand","Фердинанд","","Manchester United,England"],
-    ["Vidic","Видич","Vidić","Manchester United"],
-    ["Van der Sar","Ван дер Сар","","Manchester United,Netherlands"],
-    ["Schmeichel","Шмейхель","","Manchester United"],
-    ["Van Nistelrooy","Ван Нистелрой","","Manchester United,Real Madrid,PSV,Netherlands"],
-    ["Solskjaer","Сульшер","Solskjær","Manchester United"],
-    ["Rashford","Рэшфорд","","Manchester United,England"],
-    ["Fernandes","Бруну Фернандеш","Bruno Fernandes","Manchester United"],
-    ["Owen","Оуэн","","Liverpool,Real Madrid,England"],
-    ["Fowler","Фаулер","","Liverpool"],
-    ["Carragher","Каррагер","","Liverpool"],
-    ["Torres","Торрес","","Liverpool,Chelsea,Atletico Madrid,Spain"],
-    ["Alonso","Хаби Алонсо","Xabi Alonso","Liverpool,Real Madrid,Bayern Munich,Spain"],
-    ["Van Dijk","Ван Дейк","","Liverpool"],
-    ["Firmino","Фирмино","","Liverpool"],
-    ["Bergkamp","Бергкамп","","Arsenal,Inter Milan,Ajax,Netherlands"],
-    ["Vieira","Вьейра","Vieira","Arsenal,Juventus,Inter Milan,France"],
-    ["Pires","Пирес","","Arsenal,France"],
-    ["Fabregas","Фабрегас","Fàbregas","Arsenal,Barcelona,Chelsea,Spain"],
-    ["Van Persie","Ван Перси","","Arsenal,Manchester United,Feyenoord,Netherlands"],
-    ["Adams","Адамс","","Arsenal"],
-    ["Ozil","Озил","Özil","Arsenal,Real Madrid,Germany"],
-    ["Saka","Сака","","Arsenal,England"],
-    ["Odegaard","Эдегор","Ødegaard","Arsenal,Real Madrid"],
-    ["Zola","Дзола","","Chelsea,Italy"],
-    ["Essien","Эссьен","","Chelsea"],
-    ["Cole","Коул","","Arsenal,Chelsea,England"],
-    ["Shevchenko","Шевченко","","AC Milan,Chelsea"],
-    ["Inzaghi","Индзаги","","AC Milan,Juventus,Italy"],
-    ["Gattuso","Гаттузо","","AC Milan,Italy"],
-    ["Seedorf","Зеедорф","","AC Milan,Ajax,Real Madrid,Inter Milan,Netherlands"],
-    ["Van Basten","Ван Бастен","","AC Milan,Ajax,Netherlands"],
-    ["Gullit","Гуллит","","AC Milan,Netherlands"],
-    ["Baresi","Барези","","AC Milan,Italy"],
-    ["Kaka","Кака","Kaká","AC Milan,Real Madrid,Brazil"],
-    ["Leao","Леау","Leão","AC Milan"],
-    ["Ibrahimovic","Ибрагимович","Ibrahimović","AC Milan,Inter Milan,Juventus,Barcelona,Paris Saint-Germain,Manchester United,Ajax"],
-    ["Zanetti","Дзанетти","","Inter Milan,Argentina"],
-    ["Adriano","Адриано","","Inter Milan,Brazil"],
-    ["Milito","Милито","","Inter Milan,Argentina"],
-    ["Sneijder","Снейдер","","Inter Milan,Ajax,Real Madrid,Netherlands"],
-    ["Eto'o","Это'о","","Inter Milan,Barcelona"],
-    ["Vieri","Вьери","","Inter Milan,Juventus,Italy"],
-    ["Recoba","Рекоба","","Inter Milan"],
-    ["Lukaku","Лукаку","","Inter Milan,Chelsea,Manchester United,Roma"],
-    ["Xavi","Хави","","Barcelona,Spain"],
-    ["Iniesta","Иньеста","","Barcelona,Spain"],
-    ["Puyol","Пуйоль","","Barcelona,Spain"],
-    ["Busquets","Бускетс","","Barcelona,Spain"],
-    ["Pique","Пике","Piqué","Barcelona,Spain"],
-    ["Suarez","Суарес","Suárez","Barcelona,Liverpool,Atletico Madrid"],
-    ["Rivaldo","Ривалдо","","Barcelona,AC Milan,Brazil"],
-    ["Stoichkov","Стоичков","","Barcelona"],
-    ["Romario","Ромарио","Romário","Barcelona,PSV,Brazil"],
-    ["Kluivert","Клуйверт","","Barcelona,Ajax,Netherlands"],
-    ["Yamal","Ямаль","Lamine Yamal","Barcelona,Spain"],
-    ["Pedri","Педри","","Barcelona,Spain"],
-    ["Gavi","Гави","","Barcelona,Spain"],
-    ["Raul","Рауль","Raúl","Real Madrid,Spain"],
-    ["Figo","Фигу","","Real Madrid,Barcelona,Inter Milan"],
-    ["Roberto Carlos","Роберто Карлос","","Real Madrid,Brazil"],
-    ["Ramos","Рамос","Sergio Ramos","Real Madrid,Paris Saint-Germain,Spain"],
-    ["Casillas","Касильяс","","Real Madrid,Porto,Spain"],
-    ["Kroos","Кроос","","Real Madrid,Bayern Munich,Germany"],
-    ["Marcelo","Марсело","","Real Madrid,Brazil"],
-    ["Vinicius","Винисиус","Vinícius Jr","Real Madrid,Brazil"],
-    ["Bellingham","Беллингем","","Real Madrid,Borussia Dortmund,England"],
-    ["Bale","Бэйл","","Real Madrid,Tottenham"],
-    ["Di Maria","Ди Мария","Di María","Real Madrid,Paris Saint-Germain,Juventus,Benfica,Argentina"],
-    ["Courtois","Куртуа","","Real Madrid,Chelsea,Atletico Madrid"],
-    ["Muller","Мюллер","Müller","Bayern Munich,Germany"],
-    ["Neuer","Нойер","","Bayern Munich,Germany"],
-    ["Lahm","Лам","","Bayern Munich,Germany"],
-    ["Robben","Роббен","","Bayern Munich,Chelsea,Real Madrid,Netherlands"],
-    ["Ribery","Рибери","Ribéry","Bayern Munich,France"],
-    ["Kahn","Кан","","Bayern Munich,Germany"],
-    ["Schweinsteiger","Швайнштайгер","","Bayern Munich,Manchester United,Germany"],
-    ["Matthaus","Маттеус","Matthäus","Bayern Munich,Inter Milan,Germany"],
-    ["Klose","Клозе","","Bayern Munich,Germany"],
-    ["Ballack","Баллак","","Bayern Munich,Chelsea,Germany"],
-    ["Klinsmann","Клинсманн","","Bayern Munich,Tottenham,Inter Milan,Germany"],
-    ["Beckenbauer","Беккенбауэр","","Bayern Munich,Germany"],
-    ["Verratti","Верратти","","Paris Saint-Germain,Italy"],
-    ["Cavani","Кавани","","Paris Saint-Germain,Napoli,Manchester United"],
-    ["Thiago Silva","Тьяго Силва","","Paris Saint-Germain,AC Milan,Chelsea,Brazil"],
-    ["Marquinhos","Маркиньос","","Paris Saint-Germain,Brazil"],
-    ["Pastore","Пасторе","","Paris Saint-Germain,Roma"],
-    ["Aguero","Агуэро","Agüero","Manchester City,Atletico Madrid,Barcelona,Argentina"],
-    ["Silva","Давид Силва","David Silva","Manchester City,Spain"],
-    ["Kompany","Компани","","Manchester City"],
-    ["Foden","Фоден","","Manchester City,England"],
-    ["Toure","Яя Туре","Yaya Touré","Manchester City,Barcelona"],
-    ["Lloris","Льорис","","Tottenham,France"],
-    ["Ginola","Жинола","","Tottenham,Newcastle,France"],
-    ["Reus","Ройс","","Borussia Dortmund,Germany"],
-    ["Sancho","Санчо","","Borussia Dortmund,Manchester United,England"],
-    ["Kagawa","Кагава","","Borussia Dortmund,Manchester United"],
-    ["Maradona","Марадона","","Napoli,Barcelona,Argentina"],
-    ["Higuain","Игуаин","Higuaín","Napoli,Juventus,Real Madrid,Argentina"],
-    ["Insigne","Инсинье","","Napoli,Italy"],
-    ["Lavezzi","Лавесси","","Napoli,Paris Saint-Germain,Argentina"],
-    ["Hamsik","Хамшик","Hamšík","Napoli"],
-    ["Kvaratskhelia","Кварацхелия","","Napoli,Paris Saint-Germain"],
-    ["De Rossi","Де Росси","","Roma,Italy"],
-    ["Batistuta","Батистута","","Roma,Argentina"],
-    ["Dzeko","Джеко","Džeko","Roma,Manchester City,Inter Milan"],
-    ["Forlan","Форлан","Forlán","Atletico Madrid,Manchester United,Inter Milan"],
-    ["Simeone","Симеоне","","Atletico Madrid,Inter Milan,Argentina"],
-    ["Godin","Годин","","Atletico Madrid,Inter Milan"],
-    ["Costa","Диего Коста","Diego Costa","Atletico Madrid,Chelsea,Spain"],
-    ["Cruyff","Кройф","Cruyff","Ajax,Barcelona,Netherlands"],
-    ["Litmanen","Литманен","","Ajax,Liverpool"],
-    ["De Jong","Де Йонг","","Ajax,Barcelona,Netherlands"],
-    ["Overmars","Овермарс","","Ajax,Arsenal,Barcelona,Netherlands"],
-    ["Eusebio","Эусебио","Eusébio","Benfica"],
-    ["Rui Costa","Руй Кошта","","Benfica,AC Milan"],
-    ["Aimar","Аймар","","Benfica,Argentina"],
-    ["Deco","Деку","","Porto,Barcelona,Chelsea"],
-    ["Falcao","Фалькао","","Porto,Atletico Madrid,Manchester United"],
-    ["Hulk","Халк","","Porto,Zenit,Brazil"],
-    ["Quaresma","Куарешма","","Porto"],
-    ["Pele","Пеле","Pelé","Brazil"],
-    ["Zico","Зико","","Brazil"],
-    ["Cafu","Кафу","","AC Milan,Roma,Brazil"],
-    ["Riquelme","Рикельме","","Barcelona,Argentina"],
-    ["Crespo","Креспо","","Chelsea,AC Milan,Inter Milan,Argentina"],
-    ["Mascherano","Маскерано","","Barcelona,Liverpool,Argentina"],
-    ["Platini","Платини","","Juventus,France"],
-    ["Papin","Папен","","AC Milan,Bayern Munich,France"],
-    ["Deschamps","Дешам","","Juventus,Chelsea,France"],
-    ["Thuram","Тюрам","","Juventus,Barcelona,France"],
-    ["Desailly","Десайи","","AC Milan,Chelsea,France"],
-    ["Shearer","Ширер","","Newcastle,England"],
-    ["Arshavin","Аршавин","","Zenit,Arsenal,Russia"],
-    ["Kerzhakov","Кержаков","","Zenit,Russia"],
-    ["Dzyuba","Дзюба","","Zenit,Spartak Moscow,Russia"],
-    ["Danny","Дани","","Zenit"],
+    ["Messi","Месси","","Barcelona:2004-2020,Paris Saint-Germain:2021-2022,Inter Miami:2023-2026,Argentina:2005-2026"],
+    ["Ronaldo","Роналду Криштиану","Cristiano Ronaldo","Manchester United:2003-2008,Real Madrid:2009-2017,Juventus:2018-2020,Manchester United:2021-2021,Al-Nassr:2022-2026,Portugal:2003-2026"],
+    ["Ronaldo Nazario","Роналдо Назарио","Ronaldo Nazário (R9)","PSV:1994-1995,Barcelona:1996-1996,Inter Milan:1997-2001,Real Madrid:2002-2006,AC Milan:2007-2007,Brazil:1994-2006"],
+    ["Mbappe","Мбаппе","Mbappé","Monaco:2015-2016,Paris Saint-Germain:2017-2023,Real Madrid:2024-2026,France:2017-2026"],
+    ["Neymar","Неймар","","Santos:2009-2012,Barcelona:2013-2016,Paris Saint-Germain:2017-2022,Al-Hilal:2023-2023,Santos:2025-2025,Brazil:2010-2024"],
+    ["Haaland","Холанд","Haaland","Borussia Dortmund:2019-2021,Manchester City:2022-2026,Norway:2019-2026"],
+    ["Benzema","Бензема","","Olympique Lyonnais:2005-2008,Real Madrid:2009-2022,France:2007-2021"],
+    ["Modric","Модрич","Modrić","Tottenham:2008-2011,Real Madrid:2012-2024,AC Milan:2025-2026,Croatia:2006-2026"],
+    ["Lewandowski","Левандовски","","Borussia Dortmund:2010-2013,Bayern Munich:2014-2021,Barcelona:2022-2026,Poland:2008-2026"],
+    ["Salah","Салах","","Chelsea:2014-2015,Roma:2015-2016,Liverpool:2017-2026,Egypt:2011-2026"],
+    ["Mane","Мане","Mané","Liverpool:2016-2021,Bayern Munich:2022-2022,Al-Nassr:2023-2026,Senegal:2012-2026"],
+    ["Kane","Кейн","","Tottenham:2013-2022,Bayern Munich:2023-2026,England:2015-2026"],
+    ["Son","Сон Хын Мин","Son Heung-min","Bayer Leverkusen:2013-2014,Tottenham:2015-2024,South Korea:2010-2026"],
+    ["De Bruyne","Де Брёйне","","Chelsea:2012-2013,Wolfsburg:2014-2014,Manchester City:2015-2024,Belgium:2010-2024"],
+    ["Griezmann","Гризманн","","Real Sociedad:2009-2013,Atletico Madrid:2014-2018,Barcelona:2019-2020,Atletico Madrid:2021-2025,France:2014-2024"],
+    ["Zidane","Зидан","","Juventus:1996-2000,Real Madrid:2001-2005,France:1994-2006"],
+    ["Ronaldinho","Роналдиньо","","Paris Saint-Germain:2001-2002,Barcelona:2003-2007,AC Milan:2008-2009,Flamengo:2011-2011,Brazil:1999-2013"],
+    ["Henry","Анри","","Monaco:1994-1998,Juventus:1999-1999,Arsenal:1999-2006,Barcelona:2007-2009,France:1997-2010"],
+    ["Beckham","Бекхэм","","Manchester United:1992-2002,Real Madrid:2003-2006,LA Galaxy:2007-2011,AC Milan:2008-2009,Paris Saint-Germain:2012-2012,England:1996-2009"],
+    ["Rooney","Руни","","Everton:2002-2003,Manchester United:2004-2016,England:2003-2016"],
+    ["Gerrard","Джеррард","","Liverpool:1998-2014,LA Galaxy:2015-2015,England:2000-2014"],
+    ["Lampard","Лэмпард","","West Ham:1995-2000,Chelsea:2001-2013,Manchester City:2014-2014,England:1999-2014"],
+    ["Drogba","Дрогба","","Olympique Marseille:2003-2003,Chelsea:2004-2011,Chelsea:2014-2014,Ivory Coast:2002-2014"],
+    ["Terry","Терри","","Chelsea:1998-2016,England:2003-2012"],
+    ["Cech","Чех","Čech","Chelsea:2004-2014,Arsenal:2015-2018,Czech Republic:2002-2016"],
+    ["Hazard","Азар","","Lille:2007-2011,Chelsea:2012-2018,Real Madrid:2019-2022,Belgium:2008-2022"],
+    ["Maldini","Мальдини","","AC Milan:1985-2008,Italy:1988-2002"],
+    ["Pirlo","Пирло","","Inter Milan:1998-2000,AC Milan:2001-2010,Juventus:2011-2014,Italy:2002-2015"],
+    ["Totti","Тотти","","Roma:1992-2016,Italy:1998-2006"],
+    ["Del Piero","Дель Пьеро","","Juventus:1993-2011,Italy:1995-2008"],
+    ["Baggio","Баджо","","Juventus:1990-1994,AC Milan:1995-1996,Inter Milan:1998-1999,Italy:1988-2004"],
+    ["Buffon","Буффон","","Parma:1995-2000,Juventus:2001-2017,Paris Saint-Germain:2018-2018,Italy:1997-2018"],
+    ["Nedved","Недвед","Nedvěd","Lazio:1996-2000,Juventus:2001-2008,Czech Republic:1994-2006"],
+    ["Trezeguet","Трезеге","","Monaco:1995-1999,Juventus:2000-2009,France:1998-2008"],
+    ["Dybala","Дибала","","Juventus:2015-2021,Roma:2022-2025,Argentina:2017-2026"],
+    ["Tevez","Тевес","","Manchester United:2007-2008,Manchester City:2009-2012,Juventus:2013-2014,Boca Juniors:2015-2016,Argentina:2004-2015"],
+    ["Vidal","Видаль","","Bayer Leverkusen:2008-2010,Juventus:2011-2014,Bayern Munich:2015-2017,Barcelona:2018-2019,Inter Milan:2020-2021,Chile:2007-2021"],
+    ["Pogba","Погба","","Manchester United:2011-2011,Juventus:2012-2015,Manchester United:2016-2021,Juventus:2022-2023,France:2013-2022"],
+    ["Cantona","Кантона","","Olympique Marseille:1988-1990,Leeds United:1991-1991,Manchester United:1992-1996,France:1987-1995"],
+    ["Giggs","Гиггз","","Manchester United:1990-2013"],
+    ["Scholes","Скоулз","","Manchester United:1993-2012,England:1997-2004"],
+    ["Keane","Кин","","Nottingham Forest:1990-1992,Manchester United:1993-2004,Ireland:1991-2005"],
+    ["Ferdinand","Фердинанд","","West Ham:1995-1999,Leeds United:2000-2001,Manchester United:2002-2013,England:1997-2011"],
+    ["Vidic","Видич","Vidić","Spartak Moscow:2004-2005,Manchester United:2006-2013,Inter Milan:2014-2015,Serbia:2002-2012"],
+    ["Van der Sar","Ван дер Сар","","Ajax:1991-1998,Juventus:1999-2000,Fulham:2001-2004,Manchester United:2005-2010,Netherlands:1995-2008"],
+    ["Schmeichel","Шмейхель","","Manchester United:1991-1998"],
+    ["Van Nistelrooy","Ван Нистелрой","","PSV:1998-2000,Manchester United:2001-2005,Real Madrid:2006-2009,Netherlands:1998-2006"],
+    ["Solskjaer","Сульшер","Solskjær","Manchester United:1996-2006"],
+    ["Rashford","Рэшфорд","","Manchester United:2015-2024,Barcelona:2025-2025,England:2016-2025"],
+    ["Fernandes","Бруну Фернандеш","Bruno Fernandes","Sporting CP:2017-2019,Manchester United:2019-2026,Portugal:2017-2026"],
+    ["Owen","Оуэн","","Liverpool:1996-2003,Real Madrid:2004-2004,Newcastle:2005-2008,Manchester United:2009-2011,England:1998-2008"],
+    ["Fowler","Фаулер","","Liverpool:1993-2000,Liverpool:2006-2006"],
+    ["Carragher","Каррагер","","Liverpool:1996-2012,England:1999-2005"],
+    ["Torres","Торрес","","Atletico Madrid:2001-2006,Liverpool:2007-2010,Chelsea:2011-2014,AC Milan:2014-2014,Atletico Madrid:2015-2017,Spain:2003-2014"],
+    ["Alonso","Хаби Алонсо","Xabi Alonso","Real Sociedad:1999-2003,Liverpool:2004-2008,Real Madrid:2009-2013,Bayern Munich:2014-2016,Spain:2003-2014"],
+    ["Van Dijk","Ван Дейк","","Celtic:2013-2014,Southampton:2015-2017,Liverpool:2018-2026,Netherlands:2015-2026"],
+    ["Firmino","Фирмино","","Liverpool:2015-2022,Al-Ahli:2023-2024,Brazil:2014-2022"],
+    ["Bergkamp","Бергкамп","","Ajax:1986-1992,Inter Milan:1993-1994,Arsenal:1995-2005,Netherlands:1990-2000"],
+    ["Vieira","Вьейра","Vieira","Arsenal:1996-2004,Juventus:2005-2005,Inter Milan:2006-2009,France:1997-2009"],
+    ["Pires","Пирес","","Olympique Marseille:1998-1999,Arsenal:2000-2005,France:1996-2004"],
+    ["Fabregas","Фабрегас","Fàbregas","Arsenal:2003-2010,Barcelona:2011-2013,Chelsea:2014-2018,Spain:2006-2016"],
+    ["Van Persie","Ван Перси","","Feyenoord:2002-2003,Arsenal:2004-2011,Manchester United:2012-2014,Netherlands:2005-2016"],
+    ["Adams","Адамс","","Arsenal:1983-2000,England:1987-1994"],
+    ["Ozil","Озил","Özil","Real Madrid:2010-2012,Arsenal:2013-2020,Germany:2009-2018"],
+    ["Saka","Сака","","Arsenal:2018-2026,England:2020-2026"],
+    ["Odegaard","Эдегор","Ødegaard","Real Madrid:2015-2020,Arsenal:2021-2026"],
+    ["Zola","Дзола","","Napoli:1989-1992,Parma:1993-1995,Chelsea:1996-2002,Italy:1991-1997"],
+    ["Essien","Эссьен","","Olympique Lyonnais:2003-2004,Chelsea:2005-2013,Real Madrid:2012-2012"],
+    ["Cole","Коул","","Arsenal:1999-2005,Chelsea:2006-2013,Roma:2014-2015,England:2001-2014"],
+    ["Shevchenko","Шевченко","","Dynamo Kyiv:1994-1998,AC Milan:1999-2005,Chelsea:2006-2008,Ukraine:1995-2012"],
+    ["Inzaghi","Индзаги","","Juventus:1997-2000,AC Milan:2001-2011,Italy:1997-2007"],
+    ["Gattuso","Гаттузо","","AC Milan:1999-2011,Italy:2000-2010"],
+    ["Seedorf","Зеедорф","","Ajax:1992-1994,Real Madrid:1996-1999,Inter Milan:1999-2001,AC Milan:2002-2011,Netherlands:1994-2008"],
+    ["Van Basten","Ван Бастен","","Ajax:1981-1986,AC Milan:1987-1992,Netherlands:1983-1992"],
+    ["Gullit","Гуллит","","AC Milan:1987-1992,Sampdoria:1993-1994,AC Milan:1994-1994,Chelsea:1995-1998,Netherlands:1981-1994"],
+    ["Baresi","Барези","","AC Milan:1977-1996,Italy:1982-1994"],
+    ["Kaka","Кака","Kaká","AC Milan:2003-2008,Real Madrid:2009-2012,AC Milan:2013-2013,Brazil:2002-2013"],
+    ["Leao","Леау","Leão","AC Milan:2019-2026,Portugal:2019-2026"],
+    ["Ibrahimovic","Ибрагимович","Ibrahimović","Ajax:2001-2003,Juventus:2004-2005,Inter Milan:2006-2008,Barcelona:2009-2009,AC Milan:2010-2011,Paris Saint-Germain:2012-2015,Manchester United:2016-2017,LA Galaxy:2018-2019,AC Milan:2020-2022"],
+    ["Zanetti","Дзанетти","","Inter Milan:1995-2013,Argentina:1994-2011"],
+    ["Adriano","Адриано","","Inter Milan:2001-2008,Brazil:2000-2010"],
+    ["Milito","Милито","","Inter Milan:2009-2013,Argentina:2003-2012"],
+    ["Sneijder","Снейдер","","Ajax:2002-2006,Real Madrid:2007-2008,Inter Milan:2009-2012,Netherlands:2003-2017"],
+    ["Eto'o","Это'о","","Barcelona:2004-2008,Inter Milan:2009-2010,Chelsea:2013-2013"],
+    ["Vieri","Вьери","","Juventus:1996-1996,Inter Milan:1999-2004,AC Milan:2005-2005,Italy:1997-2005"],
+    ["Recoba","Рекоба","","Inter Milan:1997-2007"],
+    ["Lukaku","Лукаку","","Chelsea:2011-2013,Manchester United:2017-2018,Inter Milan:2019-2020,Chelsea:2021-2021,Inter Milan:2022-2022,Roma:2022-2022,Napoli:2024-2025,Belgium:2010-2026"],
+    ["Xavi","Хави","","Barcelona:1998-2014,Spain:2000-2012"],
+    ["Iniesta","Иньеста","","Barcelona:2002-2017,Spain:2006-2018"],
+    ["Puyol","Пуйоль","","Barcelona:1999-2013,Spain:2000-2011"],
+    ["Busquets","Бускетс","","Barcelona:2008-2022,Inter Miami:2023-2025,Spain:2009-2022"],
+    ["Pique","Пике","Piqué","Manchester United:2004-2007,Barcelona:2008-2021,Spain:2009-2018"],
+    ["Suarez","Суарес","Suárez","Ajax:2007-2010,Liverpool:2011-2013,Barcelona:2014-2019,Atletico Madrid:2020-2021,Inter Miami:2024-2025,Uruguay:2007-2024"],
+    ["Rivaldo","Ривалдо","","Barcelona:1997-2001,AC Milan:2002-2003,Brazil:1993-2003"],
+    ["Stoichkov","Стоичков","","Barcelona:1990-1994"],
+    ["Romario","Ромарио","Romário","PSV:1988-1992,Barcelona:1993-1994,Brazil:1987-2005"],
+    ["Kluivert","Клуйверт","","Ajax:1994-1997,AC Milan:1997-1997,Barcelona:1998-2003,Newcastle:2004-2004,Netherlands:1994-2004"],
+    ["Yamal","Ямаль","Lamine Yamal","Barcelona:2023-2026,Spain:2024-2026"],
+    ["Pedri","Педри","","Barcelona:2020-2026,Spain:2021-2026"],
+    ["Gavi","Гави","","Barcelona:2021-2026,Spain:2021-2026"],
+    ["Raul","Рауль","Raúl","Real Madrid:1994-2009,Schalke 04:2010-2011,Spain:1996-2006"],
+    ["Figo","Фигу","","Sporting CP:1989-1994,Barcelona:1995-1999,Real Madrid:2000-2004,Inter Milan:2005-2008,Portugal:1991-2006"],
+    ["Roberto Carlos","Роберто Карлос","","Inter Milan:1995-1995,Real Madrid:1996-2006,Brazil:1992-2006"],
+    ["Ramos","Рамос","Sergio Ramos","Sevilla:2003-2004,Real Madrid:2005-2020,Paris Saint-Germain:2021-2022,Sevilla:2023-2023,Spain:2005-2021"],
+    ["Casillas","Касильяс","","Real Madrid:1999-2014,Porto:2015-2019,Spain:2000-2016"],
+    ["Kroos","Кроос","","Bayern Munich:2008-2013,Real Madrid:2014-2023,Germany:2010-2024"],
+    ["Marcelo","Марсело","","Real Madrid:2007-2021,Brazil:2006-2018"],
+    ["Vinicius","Винисиус","Vinícius Jr","Flamengo:2017-2018,Real Madrid:2018-2026,Brazil:2019-2026"],
+    ["Bellingham","Беллингем","","Borussia Dortmund:2020-2022,Real Madrid:2023-2026,England:2020-2026"],
+    ["Bale","Бэйл","","Southampton:2006-2006,Tottenham:2007-2012,Real Madrid:2013-2021,Tottenham:2020-2020,LA Galaxy:2022-2022"],
+    ["Di Maria","Ди Мария","Di María","Benfica:2007-2009,Real Madrid:2010-2013,Manchester United:2014-2014,Paris Saint-Germain:2015-2021,Juventus:2022-2022,Benfica:2023-2023,Argentina:2008-2024"],
+    ["Courtois","Куртуа","","Atletico Madrid:2011-2013,Chelsea:2011-2017,Real Madrid:2018-2026,Belgium:2011-2026"],
+    ["Muller","Мюллер","Müller","Bayern Munich:2008-2024,Germany:2010-2024"],
+    ["Neuer","Нойер","","Schalke 04:2006-2010,Bayern Munich:2011-2026,Germany:2009-2024"],
+    ["Lahm","Лам","","Bayern Munich:2002-2016,Germany:2004-2014"],
+    ["Robben","Роббен","","Chelsea:2004-2006,Real Madrid:2007-2008,Bayern Munich:2009-2018,Netherlands:2003-2017"],
+    ["Ribery","Рибери","Ribéry","Olympique Marseille:2005-2006,Bayern Munich:2007-2018,France:2006-2014"],
+    ["Kahn","Кан","","Bayern Munich:1994-2007,Germany:1995-2006"],
+    ["Schweinsteiger","Швайнштайгер","","Bayern Munich:2002-2014,Manchester United:2015-2016,Germany:2004-2016"],
+    ["Matthaus","Маттеус","Matthäus","Borussia Monchengladbach:1979-1983,Bayern Munich:1984-1987,Inter Milan:1988-1991,Bayern Munich:1992-1999,Germany:1980-2000"],
+    ["Klose","Клозе","","Werder Bremen:2004-2006,Bayern Munich:2007-2010,Lazio:2011-2015,Germany:2001-2014"],
+    ["Ballack","Баллак","","Bayer Leverkusen:1999-2001,Bayern Munich:2002-2005,Chelsea:2006-2009,Germany:1999-2010"],
+    ["Klinsmann","Клинсманн","","Inter Milan:1989-1991,Monaco:1992-1993,Tottenham:1994-1997,Bayern Munich:1995-1996,Germany:1987-1998"],
+    ["Beckenbauer","Беккенбауэр","","Bayern Munich:1964-1976,Germany:1965-1977"],
+    ["Verratti","Верратти","","Paris Saint-Germain:2012-2022,Italy:2012-2022"],
+    ["Cavani","Кавани","","Napoli:2010-2012,Paris Saint-Germain:2013-2019,Manchester United:2020-2021,Uruguay:2008-2022"],
+    ["Thiago Silva","Тьяго Силва","","AC Milan:2009-2011,Paris Saint-Germain:2012-2019,Chelsea:2020-2022,Brazil:2008-2022"],
+    ["Marquinhos","Маркиньос","","Paris Saint-Germain:2013-2026,Brazil:2013-2026"],
+    ["Pastore","Пасторе","","Paris Saint-Germain:2011-2017,Roma:2018-2020"],
+    ["Aguero","Агуэро","Agüero","Atletico Madrid:2006-2010,Manchester City:2011-2020,Barcelona:2021-2021,Argentina:2006-2021"],
+    ["Silva","Давид Силва","David Silva","Valencia:2006-2009,Manchester City:2010-2019,Real Sociedad:2020-2022,Spain:2006-2018"],
+    ["Kompany","Компани","","Manchester City:2008-2018,Belgium:2004-2019"],
+    ["Foden","Фоден","","Manchester City:2017-2026,England:2020-2026"],
+    ["Toure","Яя Туре","Yaya Touré","Barcelona:2007-2009,Manchester City:2010-2017,Ivory Coast:2004-2015"],
+    ["Lloris","Льорис","","Olympique Lyonnais:2008-2011,Tottenham:2012-2022,France:2008-2022"],
+    ["Ginola","Жинола","","Newcastle:1995-1996,Tottenham:1997-1999,France:1990-1995"],
+    ["Reus","Ройс","","Borussia Dortmund:2012-2023,Germany:2011-2021"],
+    ["Sancho","Санчо","","Borussia Dortmund:2017-2020,Manchester United:2021-2023,Chelsea:2024-2024,England:2018-2021"],
+    ["Kagawa","Кагава","","Borussia Dortmund:2010-2011,Manchester United:2012-2013,Borussia Dortmund:2014-2018,Japan:2008-2019"],
+    ["Maradona","Марадона","","Boca Juniors:1981-1981,Barcelona:1982-1983,Napoli:1984-1990,Argentina:1977-1994"],
+    ["Higuain","Игуаин","Higuaín","River Plate:2005-2006,Real Madrid:2007-2012,Napoli:2013-2015,Juventus:2016-2019,Chelsea:2019-2019,Argentina:2009-2018"],
+    ["Insigne","Инсинье","","Napoli:2010-2021,Italy:2012-2022"],
+    ["Lavezzi","Лавесси","","Napoli:2007-2011,Paris Saint-Germain:2012-2015,Argentina:2009-2015"],
+    ["Hamsik","Хамшик","Hamšík","Napoli:2007-2018"],
+    ["Kvaratskhelia","Кварацхелия","","Napoli:2022-2024,Paris Saint-Germain:2025-2026"],
+    ["De Rossi","Де Росси","","Roma:2001-2018,Boca Juniors:2019-2019,Italy:2004-2017"],
+    ["Batistuta","Батистута","","Fiorentina:1991-1999,Roma:2000-2002,Argentina:1991-2002"],
+    ["Dzeko","Джеко","Džeko","Wolfsburg:2007-2010,Manchester City:2011-2014,Roma:2015-2020,Inter Milan:2021-2022"],
+    ["Forlan","Форлан","Forlán","Manchester United:2002-2004,Atletico Madrid:2007-2010,Inter Milan:2011-2011,Uruguay:2002-2014"],
+    ["Simeone","Симеоне","","Atletico Madrid:1994-1996,Inter Milan:1997-1998,Lazio:1999-2002,Atletico Madrid:2003-2003,Argentina:1988-2002"],
+    ["Godin","Годин","","Atletico Madrid:2010-2018,Inter Milan:2019-2020,Uruguay:2006-2022"],
+    ["Costa","Диего Коста","Diego Costa","Atletico Madrid:2007-2013,Chelsea:2014-2017,Atletico Madrid:2018-2020,Spain:2014-2018"],
+    ["Cruyff","Кройф","Cruyff","Ajax:1964-1972,Barcelona:1973-1977,Netherlands:1966-1977"],
+    ["Litmanen","Литманен","","Ajax:1992-1998,Liverpool:2001-2002"],
+    ["De Jong","Де Йонг","","Ajax:2015-2018,Barcelona:2019-2026,Netherlands:2018-2026"],
+    ["Overmars","Овермарс","","Ajax:1992-1997,Arsenal:1997-1999,Barcelona:2000-2003,Netherlands:1993-2004"],
+    ["Eusebio","Эусебио","Eusébio","Benfica:1960-1974"],
+    ["Rui Costa","Руй Кошта","","Benfica:1991-1993,AC Milan:2001-2005,Benfica:2006-2006,Portugal:1993-2006"],
+    ["Aimar","Аймар","","Valencia:2001-2007,Benfica:2008-2010,Argentina:1999-2008"],
+    ["Deco","Деку","","Porto:1999-2004,Barcelona:2004-2008,Chelsea:2008-2010,Portugal:1999-2010"],
+    ["Falcao","Фалькао","","Porto:2009-2010,Atletico Madrid:2011-2012,Manchester United:2014-2014,Monaco:2013-2018"],
+    ["Hulk","Халк","","Porto:2008-2011,Zenit:2012-2015,Brazil:2009-2017"],
+    ["Quaresma","Куарешма","","Porto:2003-2007,Portugal:2003-2017"],
+    ["Pele","Пеле","Pelé","Santos:1956-1974,Brazil:1958-1970"],
+    ["Zico","Зико","","Brazil:1976-1986"],
+    ["Cafu","Кафу","","Roma:1997-2002,AC Milan:2003-2007,Brazil:1990-2006"],
+    ["Riquelme","Рикельме","","Boca Juniors:1996-2002,Barcelona:2002-2002,Villarreal:2003-2007,Argentina:1999-2008"],
+    ["Crespo","Креспо","","River Plate:1993-1995,Parma:1996-1999,Lazio:2000-2001,Inter Milan:2002-2002,Chelsea:2003-2003,AC Milan:2004-2004,Argentina:1994-2007"],
+    ["Mascherano","Маскерано","","River Plate:2003-2005,Liverpool:2007-2010,Barcelona:2010-2018,Argentina:2003-2018"],
+    ["Platini","Платини","","Juventus:1982-1986,France:1976-1987"],
+    ["Papin","Папен","","Olympique Marseille:1986-1991,AC Milan:1992-1993,Bayern Munich:1994-1995,France:1986-1995"],
+    ["Deschamps","Дешам","","Olympique Marseille:1990-1993,Juventus:1994-1998,Chelsea:1999-1999,France:1989-2000"],
+    ["Thuram","Тюрам","","Parma:1996-2000,Juventus:2001-2005,Barcelona:2006-2007,France:1994-2008"],
+    ["Desailly","Десайи","","Olympique Marseille:1992-1992,AC Milan:1993-1997,Chelsea:1998-2003,France:1993-2004"],
+    ["Shearer","Ширер","","Blackburn Rovers:1992-1995,Newcastle:1996-2005,England:1992-2000"],
+    ["Arshavin","Аршавин","","Zenit:2000-2008,Arsenal:2008-2011,Zenit:2012-2014,Russia:2002-2012"],
+    ["Kerzhakov","Кержаков","","Zenit:2001-2014,Russia:2003-2012"],
+    ["Dzyuba","Дзюба","","Spartak Moscow:2008-2012,Zenit:2015-2021,Russia:2015-2021"],
+    ["Danny","Дани","","Zenit:2008-2012"],
     ["Shirokov","Широков","","Zenit,Russia"],
     ["Zyryanov","Зырянов","","Zenit,Russia"],
-    ["Akinfeev","Акинфеев","","CSKA Moscow,Russia"],
-    ["Musa","Муса","","CSKA Moscow,Spartak Moscow"],
+    ["Akinfeev","Акинфеев","","CSKA Moscow:2003-2025,Russia:2004-2018"],
+    ["Musa","Муса","","CSKA Moscow:2012-2015,Leicester City:2016-2017,Al-Nassr:2018-2019,Nigeria:2010-2022"],
     ["Golovin","Головин","","CSKA Moscow,Russia"],
     ["Smolov","Смолов","","Lokomotiv Moscow,Russia"],
-    ["Zhirkov","Жирков","","CSKA Moscow,Zenit,Chelsea,Russia"],
-    ["Semak","Семак","","Zenit,Paris Saint-Germain,Russia"],
-    ["Pavlyuchenko","Павлюченко","","Spartak Moscow,Tottenham,Russia"],
+    ["Zhirkov","Жирков","","CSKA Moscow:2004-2008,Chelsea:2009-2010,Zenit:2011-2012,Russia:2005-2017"],
+    ["Semak","Семак","","Zenit:2004-2010,Paris Saint-Germain:2001-2003,Russia:1996-2008"],
+    ["Pavlyuchenko","Павлюченко","","Spartak Moscow:2003-2008,Tottenham:2008-2011,Russia:2005-2012"],
     ["Izmailov","Измайлов","","Lokomotiv Moscow,Russia"],
-    ["Cheryshev","Черышев","","Real Madrid,Russia"],
-    ["Ignashevich","Игнашевич","","CSKA Moscow,Lokomotiv Moscow,Russia"],
-    ["Karpin","Карпин","","Spartak Moscow,Russia"],
-    ["Titov","Титов","","Spartak Moscow,Russia"],
-    ["Kanchelskis","Канчельскис","","Manchester United,Russia"],
+    ["Cheryshev","Черышев","","Real Madrid:2014-2017,Russia:2013-2022"],
+    ["Ignashevich","Игнашевич","","CSKA Moscow:2004-2015,Lokomotiv Moscow:1997-2003,Russia:2002-2018"],
+    ["Karpin","Карпин","","Spartak Moscow:1990-1994,Russia:1992-2003"],
+    ["Titov","Титов","","Spartak Moscow:1992-2008,Russia:1992-2006"],
+    ["Kanchelskis","Канчельскис","","Manchester United:1991-1994,Russia:1991-1998"],
     ["Yashin","Яшин","","Russia"],
     ["Loskov","Лосков","","Lokomotiv Moscow,Russia"],
     ["Sychev","Сычёв","","Lokomotiv Moscow,Russia"],
@@ -2234,12 +2234,12 @@
     ["Blokhin","Блохин","","Dynamo Kyiv"],
     ["Yarmolenko","Ярмоленко","","Borussia Dortmund,West Ham"],
     ["Kaladze","Каладзе","","AC Milan"],
-    ["Kokorin","Кокорин","","Zenit,Spartak Moscow,Russia"],
+    ["Kokorin","Кокорин","","Zenit:2013-2015,Spartak Moscow:2016-2021,Russia:2013-2018"],
     ["Mamaev","Мамаев","","Russia"],
-    ["Shatov","Шатов","","Zenit,Russia"],
-    ["Dzagoev","Дзагоев","","CSKA Moscow,Russia"],
+    ["Shatov","Шатов","","Zenit:2012-2020,Russia:2012-2016"],
+    ["Dzagoev","Дзагоев","","CSKA Moscow:2008-2020,Russia:2010-2021"],
     ["Gazinsky","Газинский","","Russia"],
-    ["Miranchuk","Миранчук","","Lokomotiv Moscow,Russia"],
+    ["Miranchuk","Миранчук","","Lokomotiv Moscow:2013-2021,Russia:2016-2026"],
     ["Zobnin","Зобнин","","Spartak Moscow,Russia"],
     ["Kuzyaev","Кузяев","","Zenit,Russia"],
     ["Ionov","Ионов","","Russia"],
@@ -2247,49 +2247,105 @@
     ["Barinov","Баринов","","Lokomotiv Moscow,Zenit,Russia"],
     ["Claudinho","Клаудиньо","","Zenit"],
     ["Malcom","Малком","","Zenit,Barcelona"],
-    ["Mostovoy","Мостовой","","Spartak Moscow,Russia"],
+    ["Mostovoy","Мостовой","","Spartak Moscow:1990-1992,Russia:1992-2002"],
     ["Beschastnykh","Бесчастных","","Spartak Moscow,Russia"],
     ["Onopko","Онопко","","Spartak Moscow,Russia"],
     ["Radimov","Радимов","","Russia"],
     ["Kolyvanov","Колыванов","","Russia"],
     ["Cherchesov","Черчесов","","Spartak Moscow,Russia"],
-    ["Smertin","Смертин","","Chelsea,Russia"],
+    ["Smertin","Смертин","","Lokomotiv Moscow:1999-2002,Chelsea:2003-2004,Russia:1999-2008"],
     ["Pogrebnyak","Погребняк","","Zenit,Russia"],
-    ["Anyukov","Анюков","","Zenit,Russia"],
+    ["Anyukov","Анюков","","Zenit:2003-2015,Russia:2004-2012"],
     ["Dzhikiya","Джикия","","Spartak Moscow,Russia"],
   ];
 
   const norm = (str) => (str || '').toLowerCase().replace(/ё/g, 'е')
     .normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/['’`]/g, '');
-  const PLAYER_INDEX = PLAYERS.map(([fill, ru, label, teams]) => ({
-    fill, ru, label: label || fill, teams: teams.split(','),
-    hay: norm(`${fill} ${ru} ${label || ''}`),
-  }));
+  // «Barcelona:2004-2020» → { team, from, to } (годы — первый и последний сезон в составе)
+  const parseStints = (str) => str.split(',').map(t => {
+    const m = t.trim().match(/^(.*?)(?::(\d{4})-(\d{4}))?$/);
+    return { team: m[1].trim(), from: m[2] ? +m[2] : null, to: m[3] ? +m[3] : null };
+  });
+  const PLAYER_INDEX = PLAYERS.map(([fill, ru, label, teams]) => {
+    const stints = parseStints(teams);
+    return {
+      fill, ru, label: label || fill, stints,
+      teams: Array.from(new Set(stints.map(x => x.team))),
+      hay: norm(`${fill} ${ru} ${label || ''}`),
+    };
+  });
 
   function selectedTeam() {
     const national = document.querySelector('input[name="team_type"]:checked')?.value === 'national';
     return (national ? nationalSelect : clubSelect).value || '';
   }
 
+  // Год выбранного сезона/турнира: «2009/10» → 2009, «ЧМ 2018» → 2018
+  function selectedSeasonYear() {
+    const national = document.querySelector('input[name="team_type"]:checked')?.value === 'national';
+    let v;
+    if (national) {
+      v = seasonNationalSelect.value === 'other'
+        ? document.getElementById('season-national-other').value
+        : seasonNationalSelect.value;
+    } else {
+      v = document.getElementById('season-club').value;
+    }
+    v = String(v || '').trim();
+    let m = v.match(/\d{4}/);
+    if (m) return +m[0];
+    m = v.match(/^(\d{2})\s*[\/\-]/);                     // «99/00»
+    if (m) return (+m[1] >= 50 ? 1900 : 2000) + +m[1];
+    return null;
+  }
+
+  // Насколько игрок подходит выбранной команде и году:
+  // 4 — в этом сезоне в составе; 3 — рядом (±1 год); 2 — играл за команду, годы не известны;
+  // 1 — играл за команду, но в другое время; 0 — к команде не относится
+  function playerFit(p, team, year) {
+    if (!team) return { tier: 0 };
+    let best = { tier: 0 };
+    for (const st of p.stints) {
+      if (st.team !== team) continue;
+      let t;
+      if (st.from == null) t = 2;
+      else if (year == null) t = 2;
+      else if (year >= st.from && year <= st.to) t = 4;
+      else if (year >= st.from - 1 && year <= st.to + 1) t = 3;
+      else t = 1;
+      if (t > best.tier) best = { tier: t, stint: st };
+    }
+    return best;
+  }
+
   function findPlayers(query) {
     const q = norm(query).trim();
-    if (q.length < 2) return [];
     const team = selectedTeam();
+    const year = selectedSeasonYear();
+    const withFit = (p, i, s) => ({ p, i, s, fit: playerFit(p, team, year) });
+
+    // Пустой запрос: показываем тех, кто играл за выбранную команду в выбранный сезон
+    if (!q) {
+      if (!team || year == null) return [];
+      return PLAYER_INDEX.map((p, i) => withFit(p, i, 0)).filter(x => x.fit.tier >= 3)
+        .sort((a, b) => b.fit.tier - a.fit.tier || a.i - b.i).slice(0, 6);
+    }
+
     const score = (p, qq) => {
       const words = p.hay.split(/[\s\-]+/);
-      let s = 0;
-      if (words.some(w => w.startsWith(qq))) s = 3;
-      else if (p.hay.includes(qq)) s = 1;
-      if (s && team && p.teams.includes(team)) s += 2;   // игроки выбранной команды выше
-      return s;
+      if (words.some(w => w.startsWith(qq))) return 3;
+      if (p.hay.includes(qq)) return 1;
+      return 0;
     };
-    let res = PLAYER_INDEX.map((p, i) => ({ p, i, s: score(p, q) })).filter(x => x.s);
-    if (!res.length && q.length >= 4) {                    // мягкая поправка опечатки в конце слова
-      const cut = q.slice(0, -1);
-      res = PLAYER_INDEX.map((p, i) => ({ p, i, s: score(p, cut) })).filter(x => x.s);
-    }
-    res.sort((a, b) => b.s - a.s || a.i - b.i);
-    return res.slice(0, 6).map(x => x.p);
+    const run = (qq) => PLAYER_INDEX.map((p, i) => withFit(p, i, score(p, qq))).filter(x => x.s);
+
+    let res = run(q);
+    // одна буква — только в рамках состава команды/сезона, иначе слишком много шума
+    if (q.length < 2) res = res.filter(x => x.fit.tier >= 3);
+    if (!res.length && q.length >= 4) res = run(q.slice(0, -1));   // мягкая поправка опечатки в конце слова
+    // Сначала те, кто играл там в этот сезон, потом остальные игроки команды, потом все прочие
+    res.sort((a, b) => b.fit.tier - a.fit.tier || b.s - a.s || a.i - b.i);
+    return res.slice(0, 6);
   }
 
   const playerInput = document.getElementById('player_name');
@@ -2310,15 +2366,22 @@
     Array.from(suggestEl.children).forEach((li, i) => li.classList.toggle('active', i === suggestActive));
   }
   function renderSuggest() {
-    suggestItems = findPlayers(playerInput.value);
+    suggestItems = findPlayers(playerInput.value);    // [{ p, fit }]
     suggestEl.innerHTML = '';
     if (!suggestItems.length) { closeSuggest(); return; }
-    suggestItems.forEach((p) => {
+    suggestItems.forEach(({ p, fit }) => {
       const li = document.createElement('li');
       li.className = 'ac-item'; li.setAttribute('role', 'option');
       const main = document.createElement('span'); main.className = 'ac-main'; main.textContent = p.label;
       const sub = document.createElement('span'); sub.className = 'ac-sub';
-      sub.textContent = `${p.ru} · ${p.teams.slice(0, 3).join(', ')}`;
+      if (fit.tier === 4) {
+        // игрок в составе именно в выбранный сезон
+        const y = (st) => st.from === st.to ? `${st.from}` : `${st.from}–${st.to}`;
+        main.textContent = `✓ ${p.label}`;
+        sub.textContent = `${p.ru} · в составе: ${y(fit.stint)}`;
+      } else {
+        sub.textContent = `${p.ru} · ${p.teams.slice(0, 3).join(', ')}`;
+      }
       li.append(main, sub);
       // pointerdown, а не click: иначе поле теряет фокус раньше выбора
       li.addEventListener('pointerdown', (e) => { e.preventDefault(); pickPlayer(p); });
@@ -2329,13 +2392,13 @@
     playerInput.setAttribute('aria-expanded', 'true');
   }
   playerInput.addEventListener('input', renderSuggest);
-  playerInput.addEventListener('focus', () => { if (playerInput.value.trim().length >= 2) renderSuggest(); });
+  playerInput.addEventListener('focus', renderSuggest);
   playerInput.addEventListener('blur', () => setTimeout(closeSuggest, 120));
   playerInput.addEventListener('keydown', (e) => {
     if (suggestEl.hidden) return;
     if (e.key === 'ArrowDown') { e.preventDefault(); suggestActive = (suggestActive + 1) % suggestItems.length; paintActive(); }
     else if (e.key === 'ArrowUp') { e.preventDefault(); suggestActive = (suggestActive - 1 + suggestItems.length) % suggestItems.length; paintActive(); }
-    else if (e.key === 'Enter' && suggestActive >= 0) { e.preventDefault(); pickPlayer(suggestItems[suggestActive]); }
+    else if (e.key === 'Enter' && suggestActive >= 0) { e.preventDefault(); pickPlayer(suggestItems[suggestActive].p); }
     else if (e.key === 'Escape') closeSuggest();
   });
 
