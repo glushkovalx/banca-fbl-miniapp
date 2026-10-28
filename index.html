@@ -421,10 +421,10 @@
   .photo-add{ background:transparent; color:var(--ink); border:2px dashed var(--ink); border-radius:12px; padding:12px; font:inherit; font-weight:600; cursor:pointer; width:100%; }
   .cam-modal{ position:fixed; inset:0; z-index:9999; background:#000; display:none; flex-direction:column; }
   .cam-modal.open{ display:flex; }
-  .cam-modal video{ flex:1; min-height:0; width:100%; object-fit:cover; background:#000; }
-  .cam-bar{ display:flex; align-items:center; justify-content:space-between; padding:16px 20px calc(16px + env(safe-area-inset-bottom)); background:#000; }
-  .cam-shot{ width:68px; height:68px; border-radius:50%; border:4px solid #fff; background:var(--lime); cursor:pointer; padding:0; }
-  .cam-close,.cam-count{ color:#fff; font:inherit; font-weight:600; background:none; border:0; min-width:80px; }
+  .cam-modal video{ transition:opacity .1s; flex:1; min-height:0; width:100%; object-fit:cover; background:#000; }
+  .cam-bar{ display:flex; align-items:center; justify-content:space-between; padding:14px 12px calc(84px + env(safe-area-inset-bottom)); background:#000; }
+  .cam-shot{ flex:none; width:72px; height:72px; border-radius:50%; border:4px solid #fff; background:var(--lime); cursor:pointer; padding:0; }
+  .cam-close,.cam-count{ color:#fff; font:inherit; font-weight:600; background:none; border:0; min-width:104px; }
   .cam-count{ text-align:right; }
   .photo-btns{ display:flex; gap:8px; }
   .photo-btns .photo-add{ flex:1; padding:12px 6px; }
@@ -1830,7 +1830,10 @@
   const camVideo = document.getElementById('cam-video');
   const camCount = document.getElementById('cam-count');
   let camStream = null;
-  function updateCamCount() { camCount.textContent = selectedPhotos.length + ' / ' + MAX_PHOTOS; }
+  function updateCamCount() {
+    camCount.textContent = selectedPhotos.length + ' / ' + MAX_PHOTOS;
+    document.getElementById('cam-close').textContent = selectedPhotos.length ? 'Готово (' + selectedPhotos.length + ')' : 'Закрыть';
+  }
   function closeCamera() {
     if (camStream) camStream.getTracks().forEach(t => t.stop());
     camStream = null; camVideo.srcObject = null;
@@ -1838,7 +1841,8 @@
     renderThumbs();
   }
   async function openCamera() {
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { photoCamera.click(); return; }
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    if (isIOS || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { photoCamera.click(); return; }
     try {
       camStream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 }, height: { ideal: 1920 } }, audio: false });
@@ -1854,6 +1858,8 @@
     const c = document.createElement('canvas');
     c.width = Math.round(camVideo.videoWidth * scale); c.height = Math.round(camVideo.videoHeight * scale);
     c.getContext('2d').drawImage(camVideo, 0, 0, c.width, c.height);
+    camVideo.style.opacity = '0.2'; setTimeout(() => { camVideo.style.opacity = ''; }, 120);
+    if (navigator.vibrate) try { navigator.vibrate(30); } catch (e) {}
     c.toBlob(b => {
       if (!b) return;
       selectedPhotos.push({ blob: b, url: URL.createObjectURL(b) });
