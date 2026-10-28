@@ -419,6 +419,8 @@
   /* Фото футболки */
   .opt{ text-transform:none; letter-spacing:0; font-weight:400; }
   .photo-add{ background:transparent; color:var(--ink); border:2px dashed var(--ink); border-radius:12px; padding:12px; font:inherit; font-weight:600; cursor:pointer; width:100%; }
+  .photo-btns{ display:flex; gap:8px; }
+  .photo-btns .photo-add{ flex:1; padding:12px 6px; }
   .care-tag .photo-add{ color:var(--lime); border-color:var(--lime); margin-top:10px; }
   .photo-thumbs{ display:grid; grid-template-columns:repeat(auto-fill,minmax(0,72px)); gap:8px; }
   .photo-thumbs:empty{ display:none; }
@@ -823,7 +825,11 @@
         <label>Фото футболки <span class="opt">(по желанию, до 5)</span></label>
         <p class="field-hint">Общий вид, принт, бирка и дефекты, если есть. По фото мы точнее назовём итоговую цену.</p>
         <input id="photo-input" type="file" accept="image/*" multiple hidden>
-        <button type="button" id="photo-add-btn" class="photo-add">+ Добавить фото</button>
+        <input id="photo-camera" type="file" accept="image/*" capture="environment" hidden>
+        <div class="photo-btns" id="photo-btns">
+          <button type="button" id="photo-cam-btn" class="photo-add">📷 Сфотографировать</button>
+          <button type="button" id="photo-add-btn" class="photo-add">🖼 Из галереи</button>
+        </div>
         <div id="photo-thumbs" class="photo-thumbs"></div>
       </div>
 
@@ -1785,13 +1791,14 @@
       box.append(img, del);
       photoThumbs.appendChild(box);
     });
-    photoAddBtn.style.display = selectedPhotos.length >= MAX_PHOTOS ? 'none' : '';
+    document.getElementById('photo-btns').style.display = selectedPhotos.length >= MAX_PHOTOS ? 'none' : '';
   }
 
-  photoAddBtn.addEventListener('click', () => photoInput.click());
-  photoInput.addEventListener('change', async () => {
-    const files = Array.from(photoInput.files || []).slice(0, MAX_PHOTOS - selectedPhotos.length);
-    photoInput.value = '';
+  const photoCamera = document.getElementById('photo-camera');
+  const photoCamBtn = document.getElementById('photo-cam-btn');
+  async function handlePhotoFiles(input) {
+    const files = Array.from(input.files || []).slice(0, MAX_PHOTOS - selectedPhotos.length);
+    input.value = '';
     for (const f of files) {
       try {
         const blob = await compressImage(f);
@@ -1801,7 +1808,11 @@
       }
     }
     renderThumbs();
-  });
+  }
+  photoAddBtn.addEventListener('click', () => photoInput.click());
+  photoCamBtn.addEventListener('click', () => photoCamera.click());
+  photoInput.addEventListener('change', () => handlePhotoFiles(photoInput));
+  photoCamera.addEventListener('change', () => handlePhotoFiles(photoCamera));
 
   async function uploadPhotos(orderId) {
     const statusEl = document.getElementById('photo-status');
