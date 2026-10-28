@@ -419,6 +419,13 @@
   /* Фото футболки */
   .opt{ text-transform:none; letter-spacing:0; font-weight:400; }
   .photo-add{ background:transparent; color:var(--ink); border:2px dashed var(--ink); border-radius:12px; padding:12px; font:inherit; font-weight:600; cursor:pointer; width:100%; }
+  .cam-modal{ position:fixed; inset:0; z-index:9999; background:#000; display:none; flex-direction:column; }
+  .cam-modal.open{ display:flex; }
+  .cam-modal video{ flex:1; min-height:0; width:100%; object-fit:cover; background:#000; }
+  .cam-bar{ display:flex; align-items:center; justify-content:space-between; padding:16px 20px calc(16px + env(safe-area-inset-bottom)); background:#000; }
+  .cam-shot{ width:68px; height:68px; border-radius:50%; border:4px solid #fff; background:var(--lime); cursor:pointer; padding:0; }
+  .cam-close,.cam-count{ color:#fff; font:inherit; font-weight:600; background:none; border:0; min-width:80px; }
+  .cam-count{ text-align:right; }
   .photo-btns{ display:flex; gap:8px; }
   .photo-btns .photo-add{ flex:1; padding:12px 6px; }
   .care-tag .photo-add{ color:var(--lime); border-color:var(--lime); margin-top:10px; }
@@ -442,6 +449,14 @@
 </style>
 </head>
 <body>
+<div class="cam-modal" id="cam-modal">
+  <video id="cam-video" autoplay playsinline muted></video>
+  <div class="cam-bar">
+    <button type="button" class="cam-close" id="cam-close">Готово</button>
+    <button type="button" class="cam-shot" id="cam-shot" aria-label="Сделать снимок"></button>
+    <span class="cam-count" id="cam-count"></span>
+  </div>
+</div>
 
   <div id="order-view" style="display:none;">
     <div class="brand-mark">b.</div>
@@ -1810,7 +1825,44 @@
     renderThumbs();
   }
   photoAddBtn.addEventListener('click', () => photoInput.click());
-  photoCamBtn.addEventListener('click', () => photoCamera.click());
+  // Своя камера через getUserMedia: в Telegram на Android атрибут capture игнорируется.
+  const camModal = document.getElementById('cam-modal');
+  const camVideo = document.getElementById('cam-video');
+  const camCount = document.getElementById('cam-count');
+  let camStream = null;
+  function updateCamCount() { camCount.textContent = selectedPhotos.length + ' / ' + MAX_PHOTOS; }
+  function closeCamera() {
+    if (camStream) camStream.getTracks().forEach(t => t.stop());
+    camStream = null; camVideo.srcObject = null;
+    camModal.classList.remove('open');
+    renderThumbs();
+  }
+  async function openCamera() {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { photoCamera.click(); return; }
+    try {
+      camStream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 }, height: { ideal: 1920 } }, audio: false });
+    } catch (e) { photoCamera.click(); return; }
+    camVideo.srcObject = camStream;
+    try { await camVideo.play(); } catch (e) {}
+    updateCamCount();
+    camModal.classList.add('open');
+  }
+  document.getElementById('cam-shot').addEventListener('click', () => {
+    if (selectedPhotos.length >= MAX_PHOTOS || !camVideo.videoWidth) return;
+    const scale = Math.min(1, 1600 / Math.max(camVideo.videoWidth, camVideo.videoHeight));
+    const c = document.createElement('canvas');
+    c.width = Math.round(camVideo.videoWidth * scale); c.height = Math.round(camVideo.videoHeight * scale);
+    c.getContext('2d').drawImage(camVideo, 0, 0, c.width, c.height);
+    c.toBlob(b => {
+      if (!b) return;
+      selectedPhotos.push({ blob: b, url: URL.createObjectURL(b) });
+      updateCamCount();
+      if (selectedPhotos.length >= MAX_PHOTOS) closeCamera();
+    }, 'image/jpeg', 0.85);
+  });
+  document.getElementById('cam-close').addEventListener('click', closeCamera);
+  photoCamBtn.addEventListener('click', openCamera);
   photoInput.addEventListener('change', () => handlePhotoFiles(photoInput));
   photoCamera.addEventListener('change', () => handlePhotoFiles(photoCamera));
 
