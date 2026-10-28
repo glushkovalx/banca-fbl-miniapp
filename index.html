@@ -1892,12 +1892,13 @@
         }
       }
       if (!resp.ok) throw new Error(`Ошибка ${resp.status}`);
+      console.log('photos sent', resp.status);
       statusEl.textContent = `Фото отправлены: ${selectedPhotos.length}`;
       selectedPhotos.forEach(p => URL.revokeObjectURL(p.url));
       selectedPhotos = [];
       renderThumbs();
     } catch (err) {
-      statusEl.textContent = 'Заказ оформлен, но фото не отправились.';
+      statusEl.textContent = 'Заказ оформлен, но фото не отправились' + (err && err.message ? ' (' + err.message + ')' : '') + '.';
       retryBtn.style.display = 'block';
       retryBtn.onclick = () => uploadPhotos(orderId);
     }
